@@ -9,9 +9,9 @@ from netmiko import (
 )
 import sys
 import os
-sys.path.insert(1, os.path.join(sys.path[0], '../'))
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
 # sys.path.append(os.getcwd())
-print("***",sys.path)
+# print("***",sys.path)
 import yaml
 from constants_engine_cfg.constants_br100  import (
     CONSOLE,
@@ -25,22 +25,46 @@ class Connect():
 
     def __init__(self, log=True):
         """Init Connect-class."""
-        self.word_ping = "ping ",
-        self.ip_inet = "8.8.8.8",
+        
         try:
-            with open("file_for_back/constants_trident1.yaml") as f2:
+            with open("../constants_engine_cfg/constants_connect_br100.yaml") as f2:
                 self.VALUE_CONS_CONNECT = yaml.safe_load(f2)
             self.ssh = ConnectHandler(**self.VALUE_CONS_CONNECT)
         except ConnectionRefusedError:
             CONSOLE.print(
-                    "*" * 5, "Error connection to:",
+                    "*" * 5, "Error connection to :",
                     self.VALUE_CONS_CONNECT['host'],
                     'port:', self.VALUE_CONS_CONNECT['port'], "*" * 5,
                     "\nConnection refused - Console is busy!",
                     style='fail')
             exit()
-    def check_mode(self):
+
+    def check_connection(self, log=True):
+        """Check connection to DUT."""
+        if log:
+            CONSOLE.print(
+                'Пробую подключиться к', self.VALUE_CONS_CONNECT['host'],
+                'порт:', self.VALUE_CONS_CONNECT['port'], "...",
+                style="info")
+        try:
+            CONSOLE.print('Коммутатор',
+                self.VALUE_CONS_CONNECT['host'], 'порт:',
+                self.VALUE_CONS_CONNECT['port'], "подключен!",
+                style='success')
+        except (NetmikoAuthenticationException,
+                NetmikoTimeoutException):
+            CONSOLE.print(
+                "*" * 5, "Ошибка подключения к:",
+                self.VALUE_CONS_CONNECT['host'],
+                'порт:', self.VALUE_CONS_CONNECT['port'], "*" * 5,
+                style='fail')
+
+    def disable_config_mode(self):
+        "Check mode. if mode config return true - exit from config"
+        # self.ssh.enable()
+        # self.ssh.config_mode()
         check_mode_conn = self.ssh.check_config_mode()
+        print(check_mode_conn)
         try:
             if check_mode_conn == True:
                 self.ssh.exit_config_mode()
@@ -59,16 +83,18 @@ class Connect():
         self.ssh.enable()
         try:
             temp = self.ssh.send_command('show version',read_timeout=2)
+            print(temp)
             for i in temp:
-                print(i)
-                with open("file_for_back/process_temp.txt", 'a+') as file:
+                with open("../temps/process_wr_read.txt", 'a+') as file:
                      file.write(i)
 
         except FileNotFoundError:
             print('Файл отсутствует.')
         except ValueError as v_e:
             print(v_e)
+        with open("../temps/process_wr_read.txt", 'w') as file:
+            pass    #не удалять! - очищает файл
 
 if __name__=="__main__":
-    tr1 = Connect()
-    print(tr1.check_mode())
+    br100 = Connect()
+    print(br100.check_mode())
