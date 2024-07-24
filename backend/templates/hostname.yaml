@@ -1,0 +1,8 @@
+{
+    # "hostname DUT",
+    "interface ge1",
+    "description IP_DHCP",
+    "ip address dhcp",
+    "do write",
+    
+}

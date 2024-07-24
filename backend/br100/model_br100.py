@@ -13,21 +13,20 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 # sys.path.append(os.getcwd())
 # print("***",sys.path)
 import yaml
-from constants_engine_cfg.constants_br100  import (
+from constants_br100.constants import (
     CONSOLE,
-    NAME_DEV,
 )
 
 from ping3 import ping
 
-class Connect():
+class ConnectBR():
     """Class represents connect and disconnect actions for Node."""
 
     def __init__(self, log=True):
         """Init Connect-class."""
         
         try:
-            with open("../constants_engine_cfg/constants_connect_br100.yaml") as f2:
+            with open("../constants_br100/constants_connect.yaml") as f2:
                 self.VALUE_CONS_CONNECT = yaml.safe_load(f2)
             self.ssh = ConnectHandler(**self.VALUE_CONS_CONNECT)
         except ConnectionRefusedError:
@@ -64,10 +63,11 @@ class Connect():
         # self.ssh.enable()
         # self.ssh.config_mode()
         check_mode_conn = self.ssh.check_config_mode()
-        print(check_mode_conn)
+        
         try:
             if check_mode_conn == True:
-                self.ssh.exit_config_mode()
+                self.ssh.exit_config_mode() 
+                CONSOLE.print('Configure mode exit!', style='success')
         except ConnectionError as err:
             CONSOLE.print(
                     "*" * 5, "Error connection to:",
@@ -95,6 +95,7 @@ class Connect():
         with open("../temps/process_wr_read.txt", 'w') as file:
             pass    #не удалять! - очищает файл
 
+
 if __name__=="__main__":
-    br100 = Connect()
+    br100 = ConnectBR()
     print(br100.check_mode())
