@@ -1,0 +1,2 @@
+Test_name:Проверка работы функционала show
+ver_platform:BR-100-24f6x
