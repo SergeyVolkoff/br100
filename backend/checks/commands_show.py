@@ -31,7 +31,8 @@ def check_ver_platform():
     except ValueError as err:
         return False
     
-def check_execute_show(command: str, exp_output: str, log_string = "", timeout: int = 5):
+def check_execute_show(command: str, expect_output: str, log_string = "", timeout: int = 5):
+    print()
     pass
     
 if __name__ == "__main__":
