@@ -1,0 +1,2 @@
+r'System CPU Information'
+r'up \S+ days'

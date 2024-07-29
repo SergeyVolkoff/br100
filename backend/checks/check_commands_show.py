@@ -31,8 +31,28 @@ def check_ver_platform():
     except ValueError as err:
         return False
     
-def check_execute_show(command: str, expect_output: str, log_string = "", timeout: int = 5):
-    pass
-    
+def check_execute_command(commnds_sh: str, expect_output: str,  timeout: int = 2):
+    '''Сравнивает фактический результат выполнения команды с ожидаемым'''
+    print("Test 2", "Проверка команды:", sep='\n')
+    try:
+        with allure.step('Отправка команды'):
+            output_cli = br100.get_answerCLI(command=commnds_sh)
+            print("###", output_cli)
+            reg_output = re.search (expect_output,output_cli)
+            reg_output = reg_output.group()
+            print("###",reg_output)
+        if reg_output in output_cli:
+            print("the expectation was justified!")
+            return True
+        else: 
+            print('the expectation was not met')
+            return False
+
+    except ValueError as err:
+        print(err, "Вызвано исключение при отправке комады")
+        return False
+
+
 if __name__ == "__main__":
-    print(check_ver_platform())
+    print(check_execute_command('show system uptime', r'up \S+ days'))
+    # print(check_execute_command('show system-information cpu', r'System CPU Information'))

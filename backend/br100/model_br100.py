@@ -17,6 +17,10 @@ from constants_br100.constants import (
     CONSOLE,
 )
 
+# Constants
+
+IVALID_INPUT = "% Invalid input detected at '^' marker."
+
 from ping3 import ping
 
 class ConnectBR():
@@ -90,12 +94,24 @@ class ConnectBR():
 
         except FileNotFoundError:
             print('Файл отсутствует.')
-        except ValueError as v_e:
-            print(v_e)
+        except ValueError as val_er:
+            print(val_er)
         with open("../temps/process_wr_read.txt", 'w') as file:
             pass    #не удалять! - очищает файл
+
+    def get_answerCLI(self,command):
+        self.check_connection(self.VALUE_CONS_CONNECT)
+        self.ssh.enable()
+        try:
+            temp = self.ssh.send_command(command,read_timeout=2)
+        except ValueError as val_er:
+            print(val_er, IVALID_INPUT)
+        finally:
+            print(command, "command Ok")
+        return(temp)
+
 
 
 if __name__=="__main__":
     br100 = ConnectBR()
-    print(br100.check_mode())
+    print(br100.get_answerCLI('sh var'))
