@@ -1,0 +1,2 @@
+show system uptime, up \S+ days
+show system-information cpu, Intel

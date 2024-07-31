@@ -39,9 +39,12 @@ def check_execute_command(commnds_sh: str, expect_output: str,  timeout: int = 2
             output_cli = br100.get_answerCLI(command=commnds_sh)
             print("###", output_cli)
             reg_output = re.search (expect_output,output_cli)
-            reg_output = reg_output.group()
-            print("###",reg_output)
-        if reg_output in output_cli:
+            print(expect_output)
+            print("!!!",reg_output)
+            reg_output_gr = reg_output.group()
+            print("***",reg_output_gr)
+            
+        if reg_output_gr in output_cli:
             print("the expectation was justified!")
             return True
         else: 

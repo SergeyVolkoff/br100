@@ -1,2 +1,0 @@
-show system-information cpu
-show system uptime
