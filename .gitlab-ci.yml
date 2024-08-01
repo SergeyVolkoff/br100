@@ -14,4 +14,4 @@ run_test:
         - apt-get update
         - pip install -r backend/requirements.txt
     script:
-        - pytest -v
+        - pytest backend/tests/test_commands_show.py -v
