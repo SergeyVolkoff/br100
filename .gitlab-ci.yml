@@ -1,0 +1,17 @@
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+      when: never
+    - when: always
+
+stages:
+    - test
+
+run_test:
+    stage: test
+    image: python:3.8.10
+    before_script:
+        - apt-get update
+        - pip install -r backend/requirements.txt
+    script:
+        - pytest -v
