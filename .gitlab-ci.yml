@@ -20,4 +20,5 @@ run_test:
         - pip install --upgrade pip
         - pip install -r backend/requirements.txt
     script:
-        - pytest backend/tests/test_commands_show.py -v
+        - cd backend/tests
+        - pytest test_commands_show.py -v
