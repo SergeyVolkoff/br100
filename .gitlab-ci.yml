@@ -17,6 +17,8 @@ run_test:
     image: python
     before_script:
         - apt-get update
+        - pip install --upgrade pip
+        - pip install --root-user-action=ignore
         - pip install -r backend/requirements.txt
     script:
         - pytest backend/tests/test_commands_show.py -v
