@@ -20,7 +20,7 @@ run_test:
       when: always
       expire_in: 5 days
       paths:
-          - backend/tests/allure-report
+          backend/tests/allure-report
     before_script:
         - apt-get update
         - apt install -y openjdk-17-jdk openjdk-17-jre
@@ -32,7 +32,7 @@ run_test:
         - pytest -v test_commands_show.py --alluredir=allure-results
         # - allure generate -c allure-results -o allure-report
     after_script:
-        - allure generate -c allure-results -o allure-report
+        - allure generate -c backend/tests/allure-results -o backend/tests/allure-report
 pages:
   stage: report
   needs:
