@@ -20,7 +20,7 @@ run_test:
       when: always
       expire_in: 5 days
       paths:
-          - backend/tests/allure-report
+          - allure-report
     before_script:
         - apt-get update
         - apt install -y openjdk-17-jdk openjdk-17-jre
@@ -32,14 +32,14 @@ run_test:
         - pytest -v test_commands_show.py --alluredir=allure-results
         # - allure generate -c allure-results -o allure-report
     after_script:
-        - allure generate -c backend/tests/allure-results -o backend/tests/allure-report
+        - allure generate -c allure-results -o allure-report
 pages:
   stage: report
   needs:
     - run_test
   script:
     - mkdir public
-    - cp -r allure-report/* public
+    - cp -r backend/tests/allure-report/* public
   artifacts:
     when: on_success
     expire_in: never
