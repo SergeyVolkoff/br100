@@ -23,6 +23,7 @@ run_test:
     before_script:
         - apt-get update
         - apt install -y openjdk-17-jdk openjdk-17-jre
+        - mkdir allure-results
         - wget https://github.com/allure-framework/allure2/releases/download/2.30.0/allure-2.30.0.tgz && tar -zxvf allure-2.30.0.tgz -C /opt/ && ln -s /opt/allure-2.30.0/bin/allure /usr/bin/allure
         - pip install -r requirements.txt
 
