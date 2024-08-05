@@ -39,7 +39,7 @@ pages:
     - run_test
   script:
     - mkdir public
-    - cp -r backend/tests/allure-report/* public
+    - cp -r allure-report/* public
   artifacts:
     when: on_success
     expire_in: never
