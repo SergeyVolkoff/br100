@@ -31,5 +31,5 @@ run_test:
     script:
         - cd backend/tests
         - pytest -v test_commands_show.py --alluredir=allure-results
-    after_scripts:
+    after_script:
         - allure generate - c allure-results allure-report
