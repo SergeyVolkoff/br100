@@ -32,12 +32,14 @@ run_test:
         - pytest -v test_commands_show.py --alluredir=allure-results
         # - allure generate -c allure-results -o allure-report
     after_script:
+        - cd backend/tests
         - allure generate -c allure-results -o allure-report
 pages:
   stage: report
   needs:
     - run_test
   script:
+    - cd backend/tests
     - mkdir public
     - cp -r allure-report/* public
   artifacts:
