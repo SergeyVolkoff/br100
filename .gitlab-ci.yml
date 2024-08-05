@@ -20,7 +20,7 @@ run_test:
       when: always
       expire_in: 5 days
       paths:
-          backend/tests/allure-report
+          - backend/tests/allure-report
     before_script:
         - apt-get update
         - apt install -y openjdk-17-jdk openjdk-17-jre
