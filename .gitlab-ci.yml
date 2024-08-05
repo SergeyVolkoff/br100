@@ -11,6 +11,7 @@ default:
 
 stages:
     - test
+    - report
     
 run_test:
     stage: test
@@ -23,8 +24,6 @@ run_test:
     before_script:
         - apt-get update
         - apt install -y openjdk-17-jdk openjdk-17-jre
-        - mkdir allure-results
-        - mkdir allure-report
         - wget https://github.com/allure-framework/allure2/releases/download/2.30.0/allure-2.30.0.tgz && tar -zxvf allure-2.30.0.tgz -C /opt/ && ln -s /opt/allure-2.30.0/bin/allure /usr/bin/allure
         - pip install --upgrade pip
         - pip install -r backend/requirements.txt
@@ -32,4 +31,16 @@ run_test:
         - cd backend/tests
         - pytest -v test_commands_show.py --alluredir=allure-results
     after_script:
-        - allure generate allure-results -o allure-report
+        - allure generate -c allure-results -o allure-report
+pages:
+  stage: report
+  needs:
+    - run_test
+  script:
+    - mkdir public
+    - cp -r allure-report/* public
+    artifacts:
+      when: on_success
+      expire_in: never
+      paths:
+          - public
