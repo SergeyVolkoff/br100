@@ -26,12 +26,10 @@ run_test:
         - mkdir allure-results
         - mkdir allure-report
         - wget https://github.com/allure-framework/allure2/releases/download/2.30.0/allure-2.30.0.tgz && tar -zxvf allure-2.30.0.tgz -C /opt/ && ln -s /opt/allure-2.30.0/bin/allure /usr/bin/allure
-        - pip install -r requirements.txt
-
         - pip install --upgrade pip
         - pip install -r backend/requirements.txt
     script:
         - cd backend/tests
         - pytest -v test_commands_show.py --alluredir=allure-results
     after_script:
-        - allure generate -c allure-results -o allure-report
+        - allure generate allure-results -o allure-report
