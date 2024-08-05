@@ -20,8 +20,8 @@ run_test:
       when: always
       expire_in: 5 days
       paths:
-          - backend/tests/allure-report
-          - backend/tests/report_html
+          - allure-report
+          - report_html
     before_script:
         - apt-get update
         - apt install -y openjdk-17-jdk openjdk-17-jre
@@ -49,5 +49,5 @@ pages:
     when: on_success
     expire_in: never
     paths:
-        - backend/tests/allure-report_public
-        - backend/tests/html-report_public
+        - allure-report_public
+        - html-report_public
