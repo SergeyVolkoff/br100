@@ -45,6 +45,7 @@ pages:
     - mkdir html-report_public
     - cp -r allure-report/* allure-report_public
     - cp -r report_html/* html-report_public
+    
   artifacts:
     when: on_success
     expire_in: never
