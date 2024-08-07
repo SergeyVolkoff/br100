@@ -9,16 +9,6 @@ sys.path.insert(1, os.path.join(sys.path[0],'..'))
 from checks.check_commands_show import *
 
 
-# @allure.feature ('Тесты проверки поддержки команд show.')
-# @allure.story('1.проверка команд show.')
-# def test_check_commands_show(commnd_from_file, expect_output_fr_file):
-#     # print(commnd_from_file)
-#     assert check_execute_command(
-#         commnds_sh=commnd_from_file, 
-#         expect_output=expect_output_fr_file)==True,\
-#         f'**Результат использования команды:f"{commnd_from_file}" не соответствует ожиданиям'
-
-
 # @pytest.fixture
 def generate_cmd_reply():
     with open("../templates/shw_cmnd_and_reply.txt") as file:
@@ -40,7 +30,7 @@ task_ids = generate_cmd_reply()[1]
 @allure.feature ('Тесты проверки поддержки команд show.')
 @allure.story('1.проверка команд show.')
 @pytest.mark.parametrize('commnd_from_file, expect_output_fr_file', data_for_check, ids=task_ids)
-def test_check_commands_show1(commnd_from_file, expect_output_fr_file):
+def test_check_execute_command(commnd_from_file, expect_output_fr_file):
         print(commnd_from_file)
         assert check_execute_command(
         commnds_sh=commnd_from_file, 

@@ -30,7 +30,7 @@ run_test:
         - pip install -r backend/requirements.txt
     script:
         - cd backend/tests
-        - pytest -v --html=report_html/BULAT_TEST.html --alluredir=allure-results test_commands_show.py 
+        - pytest -v --html=report_html/BULAT_TEST.html --alluredir=allure-results test_cmd_show.py 
         # - allure generate -c allure-results -o allure-report
     after_script:
         - cd backend/tests
