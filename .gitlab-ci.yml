@@ -40,7 +40,7 @@ pages:
   needs:
     - run_test
   script:
-    - cd ../../
+    # - cd ../../
     - mkdir allure-report_public
     - mkdir html-report_public
     - cp -r backend/tests/allure-report/* allure-report_public
