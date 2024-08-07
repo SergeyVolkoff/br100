@@ -10,6 +10,7 @@ from netmiko import (
 import sys
 import os
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
+sys.path.insert(1, os.path.join(sys.path[0], '../..'))
 # sys.path.append(os.getcwd())
 # print("***",sys.path)
 import yaml

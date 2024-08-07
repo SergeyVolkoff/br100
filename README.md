@@ -23,7 +23,7 @@ pytest -v --html=report_html/BULAT_TEST.html --alluredir=allure-reports test_com
 allure serve allure-reports
 ```
 Для использования с платформы git.opk-bulat:
-1. Перейти на платформу, выбрать Pipelines нажать RUN Pipeline.
+1. Перейти на платформу,зайти в проект br100, выбрать Pipelines нажать RUN Pipeline.
 2. Дождаться выполнения.
 
 ### Использованные технологии:
