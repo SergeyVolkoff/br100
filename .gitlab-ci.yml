@@ -41,14 +41,14 @@ pages:
     - run_test
   script:
     - cd backend/tests
-    - mkdir allure-report_public
-    - mkdir html-report_public
-    - cp -r allure-report/* allure-report_public
-    - cp -r report_html/* html-report_public
+    - mkdir backend/allure-report_public
+    - mkdir backend/html-report_public
+    - cp -r allure-report/* backend/allure-report_public
+    - cp -r report_html/* backend/html-report_public
     
   artifacts:
     when: on_success
     expire_in: never
     paths:
-        - backend/tests/allure-report_public
-        - backend/tests/html-report_public
+        - backend/allure-report_public
+        - backend/html-report_public
