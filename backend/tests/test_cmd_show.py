@@ -8,7 +8,6 @@ sys.path.insert(1, os.path.join(sys.path[0],'..'))
 # print(sys.path)
 from checks.check_commands_show import *
 
-
 # @pytest.fixture
 def generate_cmd_reply():
     with open("../templates/shw_cmnd_and_reply.txt") as file:

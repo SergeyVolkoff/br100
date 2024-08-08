@@ -98,7 +98,7 @@ class ConnectBR():
         except ValueError as val_er:
             print(val_er)
         with open("../temps/process_wr_read.txt", 'w') as file:
-            pass    #не удалять! - очищает файл
+            pass    # не удалять! - очищает файл
 
     def get_answerCLI(self,command):
         self.check_connection(self.VALUE_CONS_CONNECT)

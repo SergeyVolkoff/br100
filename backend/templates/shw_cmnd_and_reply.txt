@@ -1,4 +1,4 @@
-show system uptime, up \S+ days
+show system uptime, up
 show system-information cpu, Intel
 sh system-information cpu-load, CPU Usage
 show arp, Address\s+Age\s+MAC Address\s+Interface\s+State
