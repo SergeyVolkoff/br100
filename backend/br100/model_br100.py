@@ -20,7 +20,7 @@ from constants_br100.constants import (
 
 # Constants
 
-IVALID_INPUT = "% Invalid input detected at '^' marker."
+INVALID_INPUT = "Invalid input detected"
 
 from ping3 import ping
 
@@ -103,14 +103,20 @@ class ConnectBR():
     def get_answerCLI(self,command):
         self.check_connection(self.VALUE_CONS_CONNECT)
         self.ssh.enable()
-        try:
-            temp = self.ssh.send_command(command,read_timeout=2)
-        except ValueError as val_er:
-            print(val_er, IVALID_INPUT)
-        finally:
-            print(command, "command Ok")
+        temp = self.ssh.send_command(command,read_timeout=1)
+        if INVALID_INPUT in temp:
+            print(INVALID_INPUT)
         return(temp)
-
+    
+    def get_answerCLI_conf(self,command,expcted_string):
+        self.check_connection(self.VALUE_CONS_CONNECT)
+        self.ssh.enable()
+        temp_conf=self.ssh.config_mode()
+        temp = self.ssh.send_command(command,read_timeout=1,expect_string=expcted_string)
+        if INVALID_INPUT in temp:
+            print(INVALID_INPUT)
+        self.ssh.exit_config_mode()
+        return(temp)
 
 
 if __name__=="__main__":
