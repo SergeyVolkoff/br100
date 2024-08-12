@@ -37,7 +37,27 @@ def test_check_execute_command(commnd_from_file, expect_output_fr_file):
         f'**Результат использования команды:f"{commnd_from_file}" не соответствует ожиданиям'
 
 
+name_host=(
+     
+     'DUT_Aggregation_switch_Aggregation_switch_DUT_Aggregation_switc',
+     'DUT_Aggregation_switch_Aggregation_switch_DUT_Aggregation_switch',
+    #  'DUT_Aggregation_switch_DUT_Aggregation_switch_Aggregation_switch_',
+    #  'DUT1',
+    #  'DUT'
+)
+
+task_ids = ['Verified name {0}, Name length = {1}'.format(t,len(t))
+             # определям параметр ids чтобы сделать идентификаторы для понимания вывода теста
+            for t in name_host
+            ]
+
+@allure.feature ('Тесты проверки поддержки команд show.')
+@allure.story('2.проверка команды смены имени хоста.')
+@pytest.mark.parametrize('hostname',name_host,  ids=task_ids)
+def test_check_change_hostname(hostname,):
+     assert check_change_hostname (new_hostname=hostname)==True, f'сменить имя, на имя длинной len({hostname}) не удалось'
 
 
-if __name__ == "__main__":
-    print(test_check_commands_show())
+
+# if __name__ == "__main__":
+#     print(test_check_commands_show())

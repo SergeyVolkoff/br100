@@ -4,9 +4,11 @@ import sys
 import os
 sys.path.insert(1, os.path.join(sys.path[0],'..'))
 from br100.model_br100 import ConnectBR
+from cfg_br100.cfg_reset import ConfigReset
 
 br100 = ConnectBR()
-br100.check_connection
+br100.check_connection()
+
 
     
 def check_execute_command(commnds_sh: str, expect_output: str,  timeout: int = 2):
@@ -36,44 +38,37 @@ def check_execute_command(commnds_sh: str, expect_output: str,  timeout: int = 2
         print(err, "Вызвано исключение при отправке комады")
         return False
 
-def check_change_hostname():
+def check_change_hostname(new_hostname):
     '''Проверка смены имени хоста'''
-    new_hostname = 'Aggregation_switch_DUT_Aggregation_switch_DUT_Aggregation_switc'
     expected_string = new_hostname
-    print(expected_string)
     try:
         with allure.step('Отправка команды на изменения hostname'):
-            
-            temp = br100.get_answerCLI_conf(f'hostname {new_hostname}',expected_string)
+            command = f'hostname {new_hostname}'
+            br100.get_answerCLI_conf(command)
             # Меняем имя хоста
-            output_cli = br100.ssh.send_command('show hostname',expect_string=expected_string,read_timeout=2)
+            output_cli = br100.ssh.send_command_timing('show hostname',read_timeout=0)
             # Получаем вывод из cli с новым именем хоста
-            regex_output = re.search (r'Aggregation.*\Z',output_cli)
+            regex_output = re.search(r'DUT\w+',output_cli)
             # Отбираем новое имя 
-            regex_output_gr = regex_output.group()
-            if regex_output_gr == new_hostname:
-                # Сравниваем полученное имя и введенное 
-                print("The expectation was justified!")
-
-                # Возвращаем имя DUT
-                old_hostname = 'DUT'
-                expected_string = old_hostname
-                temp = br100.get_answerCLI_conf(f'hostname {old_hostname}',expected_string)
-                output_cli = br100.ssh.send_command('show hostname',expect_string=expected_string,read_timeout=2)
-                regex_output = re.search (r'\w+$\Z',output_cli)
+            try:
                 regex_output_gr = regex_output.group()
-                return True
-            else:
-                print('Еhe expectation was not met')
+                if regex_output_gr == new_hostname:
+                    # Сравниваем полученное имя и введенное 
+                    print("The expectation was justified!")
+                    return True
+                else:
+                    return False
+            except AttributeError as err:
+                print(err, "Вызвано исключение при отправке комады")
+                # Возвращаем имя DUTu
+                print('Еhe expectation was not met..')
                 return False
-        
         
     except ValueError as err:
         print(err, "Вызвано исключение при отправке комады")
+        print('Еhe expectation was not met')
         return False
-    
-    
 
 
 if __name__ == "__main__":
-    print(check_change_hostname())
+    print(check_change_hostname('DUT_Aggregation1'))

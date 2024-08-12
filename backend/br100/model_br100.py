@@ -108,15 +108,18 @@ class ConnectBR():
             print(INVALID_INPUT)
         return(temp)
     
-    def get_answerCLI_conf(self,command,expcted_string):
+    def get_answerCLI_conf(self,command):
         self.check_connection(self.VALUE_CONS_CONNECT)
-        self.ssh.enable()
-        temp_conf=self.ssh.config_mode()
-        temp = self.ssh.send_command(command,read_timeout=1,expect_string=expcted_string)
+        find_prompt = self.ssh.find_prompt()
+        if not '#' in find_prompt:    
+            self.ssh.enable()
+        if not 'config' in find_prompt:
+            self.ssh.config_mode()
+        temp = self.ssh.send_command_timing(command,read_timeout=0)
         if INVALID_INPUT in temp:
             print(INVALID_INPUT)
         self.ssh.exit_config_mode()
-        return(temp)
+        return temp
 
 
 if __name__=="__main__":
