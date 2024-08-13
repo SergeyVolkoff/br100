@@ -12,7 +12,7 @@ br100.check_connection()
 
     
 def check_execute_command(commnds_sh: str, expect_output: str,  timeout: int = 2):
-    '''Сравнивает фактический результат выполнения команды с ожидаемым'''
+    '''Сравнивает фактический результат выполнения команды show с ожидаемым'''
     print("Test 2", "Проверка команды:", sep='\n')
     try:
         with allure.step(f'Отправка команды {commnds_sh} '):
@@ -44,7 +44,9 @@ def check_change_hostname(new_hostname):
     try:
         with allure.step('Отправка команды на изменения hostname'):
             command = f'hostname {new_hostname}'
-            br100.get_answerCLI_conf(command)
+            # br100.get_answerCLI_conf(command)
+            br100.ssh.send_config_set(command,)
+            
             # Меняем имя хоста
             output_cli = br100.ssh.send_command_timing('show hostname',read_timeout=0)
             # Получаем вывод из cli с новым именем хоста
@@ -68,6 +70,7 @@ def check_change_hostname(new_hostname):
         print(err, "Вызвано исключение при отправке комады")
         print('Еhe expectation was not met')
         return False
+
 
 
 if __name__ == "__main__":

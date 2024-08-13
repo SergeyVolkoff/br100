@@ -10,6 +10,7 @@ from checks.check_commands_show import *
 
 # @pytest.fixture
 def generate_cmd_reply():
+    '''Фикстура подготовки данных из файла'''
     with open("../templates/shw_cmnd_and_reply.txt") as file:
         data_for_check = []
         lines = file.readlines ()
@@ -30,6 +31,7 @@ task_ids = generate_cmd_reply()[1]
 @allure.story('1.проверка команд show.')
 @pytest.mark.parametrize('commnd_from_file, expect_output_fr_file', data_for_check, ids=task_ids)
 def test_check_execute_command(commnd_from_file, expect_output_fr_file):
+        '''Тест проверки команд show from file'''
         print(commnd_from_file)
         assert check_execute_command(
         commnds_sh=commnd_from_file, 
@@ -43,7 +45,7 @@ name_host=(
      'DUT_Aggregation_switch_Aggregation_switch_DUT_Aggregation_switch',
     #  'DUT_Aggregation_switch_DUT_Aggregation_switch_Aggregation_switch_',
     #  'DUT1',
-    #  'DUT'
+     'DUT'
 )
 
 task_ids = ['Verified name {0}, Name length = {1}'.format(t,len(t))
@@ -55,7 +57,8 @@ task_ids = ['Verified name {0}, Name length = {1}'.format(t,len(t))
 @allure.story('2.проверка команды смены имени хоста.')
 @pytest.mark.parametrize('hostname',name_host,  ids=task_ids)
 def test_check_change_hostname(hostname,):
-     assert check_change_hostname (new_hostname=hostname)==True, f'сменить имя, на имя длинной len({hostname}) не удалось'
+     '''Тест проверки команды смены имени хоста'''
+     assert check_change_hostname (new_hostname=hostname)==True, f'сменить имя не удалось!'
 
 
 
