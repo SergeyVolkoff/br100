@@ -6,4 +6,4 @@ show clock, UTC
 show running-config, !Last configuration
 show interface brief, eth0
 show version, EOS\s\S+ (?P<ver_HW>\S+)
-sh hardware-information all, HARD DISK INFORMATION
+sh hardware-information memory, HARD DISK INFORMATION

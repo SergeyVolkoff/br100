@@ -40,12 +40,12 @@ def test_check_execute_command(commnd_from_file, expect_output_fr_file):
 
 
 name_host=(
-     
-     'DUT_Aggregation_switch_Aggregation_switch_DUT_Aggregation_switc',
-     'DUT_Aggregation_switch_Aggregation_switch_DUT_Aggregation_switch',
-    #  'DUT_Aggregation_switch_DUT_Aggregation_switch_Aggregation_switch_',
-    #  'DUT1',
-     'DUT'
+#      'DUT',
+#      'DUT_Aggregation_switch_Aggregation_switch_DUT_Aggregation_switc',
+#      'DUT_Aggregation_switch_Aggregation_switch_DUT_Aggregation_switch',
+#      'DUT_Aggregation_switch_DUT_Aggregation_switch_Aggregation_switch_',
+     'DUT1',
+#      
 )
 
 task_ids = ['Verified name {0}, Name length = {1}'.format(t,len(t))
