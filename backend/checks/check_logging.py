@@ -7,7 +7,7 @@ from br100.model_br100 import ConnectBR
 from cfg_br100.cfg_reset import ConfigReset
 
 br100 = ConnectBR()
-# br100.check_connection()
+br100.check_connection()
 
 def check_logging_file():
     '''Проверка логгирования событий в файл.'''

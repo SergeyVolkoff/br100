@@ -9,12 +9,12 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 ixiaApiServer = "127.0.0.1"
 ixiaApiPort = '11009'
 ixiaChassis = "10.27.192.3"
-#ixiaApiAuth = {"username": "admin",
-#              "password": "admin"}
+ixiaApiAuth = {"username": "admin",
+             "password": "admin"}
 
 #root = f"https://{ixiaApiServer}:{ixiaApiPort}"
 
-class IxAPI:
+class IxAPI():
     
     def __init__(self, ixiaApiServer, ixiaApiPort):
         self.ipserver = ixiaApiServer
@@ -266,4 +266,4 @@ class IxAPI:
                                      headers={'content-type': 'application/json'}, verify=False)
             return response.json()
         except Exception as error:
-            print(error) 
+            print(error)
