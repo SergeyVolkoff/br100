@@ -60,7 +60,11 @@ def test_check_change_hostname(hostname,):
      '''Тест проверки команды смены имени хоста'''
      assert check_change_hostname (new_hostname=hostname)==True, f'сменить имя не удалось!'
 
-
+@allure.feature ('Тесты логгирования событий.')
+@allure.story('3.проверка создания файла логгирования.')
+def test_check_logging_file():
+     '''Тест проверки создания файла логгирования.'''
+     assert check_logging_file()==True, f'Логиррование не ведется или ведется не в файл logs!'
 
 # if __name__ == "__main__":
 #     print(test_check_commands_show())

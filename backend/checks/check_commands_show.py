@@ -9,7 +9,6 @@ from cfg_br100.cfg_reset import ConfigReset
 br100 = ConnectBR()
 br100.check_connection()
 
-
     
 def check_execute_command(commnds_sh: str, expect_output: str,  timeout: int = 2):
     '''Сравнивает фактический результат выполнения команды show с ожидаемым'''
@@ -78,7 +77,7 @@ def check_logging_file():
         with allure.step(f'Отправка команды настройки логгирования в файл'):
             br100.get_answerCLI_conf(command='logging logfile logs 6 size 4096')
             output_cli = br100.get_answerCLI(command='show logging logfile')
-            expect_output = 'logging\W+(?P<status_log>enabled)  File Name.+(?P<name_log>logs)'
+            expect_output = 'logging\W+(?P<status_log>.+)\n.+File Name.+(?P<name_log>var\/.+)'
             #  отбираем из вывода в cli нужную строку 2мя группами: status_log и name_log
             reg_output = re.search (expect_output,output_cli)
             status_log = reg_output.group('status_log')
