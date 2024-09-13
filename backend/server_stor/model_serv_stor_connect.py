@@ -14,8 +14,8 @@ from constants_br100.constants import (
     CONSOLE,
 )
 # Constants
-from br100.model_br100 import ConnectBR
-br100 = ConnectBR()
+# from br100.model_br100 import ConnectBR
+# br100 = ConnectBR()
 INVALID_INPUT = "Invalid input detected"
 
 class ConnectStorage():
@@ -83,10 +83,12 @@ class ConnectStorage():
         pattern_name_efi = '(?P<img_name>\S+(?<=_EFI))'
         reg_output= re.search (pattern_name_efi, output_data)
         # Извлекаем имя нужного нам имиджа
-        img_name = reg_output.group('img_name')+'.img'
+        img_name = reg_output.group('img_name')
+        print(img_name)
         # Извлекаем имя path
-        path_img = f'{name_dir}/output/images'
-        return path_img,img_name
+        path_img = f'{name_dir}/output/images/'
+        return path_img, img_name
+    
         
 
 

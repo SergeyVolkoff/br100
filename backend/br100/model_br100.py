@@ -11,13 +11,16 @@ import sys
 import os
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 sys.path.insert(1, os.path.join(sys.path[0], '../..'))
+
+from server_stor.model_serv_stor_connect import ConnectStorage
+serv_stor = ConnectStorage()
+
 # sys.path.append(os.getcwd())
 # print("***",sys.path)
-import yaml
+import yaml  # noqa: E402
 from constants_br100.constants import (
     CONSOLE,
 )
-
 # Constants
 
 INVALID_INPUT = "Invalid input detected"
@@ -143,11 +146,18 @@ class ConnectBR():
         return ip_eth0
 
     def sendFWfromHelpSRV(self):
-        # ip_HelpSRV = 
-        output = self.ssh.send_command(f'copy image http://{ip_HelpSRV}/{name_last_FW}')
+        with open("../server_help/constants_connect.yaml") as f2:
+                self.VALUE_CONS_CONNECT = yaml.safe_load(f2)
+        ip_HelpSRV = (self.VALUE_CONS_CONNECT['ip'])
+        path_img, img_name = serv_stor.get_name_last_FW_path()
+        cmnd_load_FW = f'copy image {ip_HelpSRV}/{img_name}.img'
+        print("***",cmnd_load_FW)
+        output = self.ssh.send_command_timing(
+            cmnd_load_FW,strip_command=False
+            )
         return output
 
 
 if __name__=="__main__":
     br100 = ConnectBR()
-    print(br100.get_ip_eth0())
+    print(br100.sendFWfromHelpSRV())
