@@ -1,5 +1,5 @@
 """Base class for switches BR100."""
-
+import datetime as dt
 import re
 import time
 from netmiko import (
@@ -70,7 +70,7 @@ class ConnectBR():
         check_mode_conn = self.ssh.check_config_mode()
         
         try:
-            if check_mode_conn == True:
+            if check_mode_conn is True:
                 self.ssh.exit_config_mode() 
                 CONSOLE.print('Configure mode exit!', style='success')
         except ConnectionError as err:
@@ -117,8 +117,37 @@ class ConnectBR():
             print(INVALID_INPUT)
         
         return temp
+            
+    def get_date_FW(self):
+        '''Сравниваем текущую дату и дату установленой прошивки
+        если тек дата больше - вернет Тру.'''
+        output_cli = self.ssh.send_command_timing('show version')
+        except_output = 'MSK (?P<date>.+)'
+        regex_output = re.search(except_output,output_cli)
+        dateFW = regex_output.group('date')
+        return(dateFW)
+        # date_curent_F = dt.datetime.now()
+        # dateFW_F = dt.datetime.strptime(dateFW,"%d/%m/%Y")
+        # return(date_curent_F>dateFW_F)
+    
+    def get_ip_eth0(self):
+        self.check_connection(self.VALUE_CONS_CONNECT)
+        self.ssh.enable()
+        temp = self.ssh.send_command('sh ip interface eth0 brief',read_timeout=1)
+        print(temp)
+        temp1 = re.search('eth0\s+\*(?P<ip_eth0>\S+)',temp)
+        try:
+            ip_eth0 = temp1.group('ip_eth0')
+        except NetmikoTimeoutException as err:
+            print("Не смог получить и обработать ip_eth0 error", err)
+        return ip_eth0
+
+    def sendFWfromHelpSRV(self):
+        # ip_HelpSRV = 
+        output = self.ssh.send_command(f'copy image http://{ip_HelpSRV}/{name_last_FW}')
+        return output
 
 
 if __name__=="__main__":
     br100 = ConnectBR()
-    print(br100.get_answerCLI('sh var'))
+    print(br100.get_ip_eth0())

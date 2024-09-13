@@ -1,0 +1,6 @@
+device_type: linux
+# host: git-ci-storage.opk-bulat.ru
+ip: 10.27.193.101
+username:  user
+password:  '12345678'
+port: '22'
