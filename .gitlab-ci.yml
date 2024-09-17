@@ -10,11 +10,12 @@ default:
     - br100
 
 stages:
+    - upgrade_check_fw
     - test
     - report
-####
+    
 run_check_fw:
-    stage: .pre
+    stage: upgrade_check_fw
     image: python
     artifacts:
       when: always
