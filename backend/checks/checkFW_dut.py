@@ -17,7 +17,7 @@ br100 = ConnectBR()
 serv_stor = ConnectStorage()
 serv_help = ConnectSrvHelp()
 
-def compare_FW_srvANDdut():
+def compare_FW_dut_and_srv():
     '''Возвращает TRUE\FALSE как результат проверки даты прошивки после прошивки.
     Проверяет дату прошивки на DUT.
     Получает на git-ci-storage дату последней прошивки, сравнивая с текущей датой.
