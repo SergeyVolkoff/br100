@@ -113,5 +113,5 @@ def check_FW_dut():
         Датa прошивки на git-ci-storage - {dateFW_stor}')
         return True
 
-if __name__ == "__main__":
-    print(check_FW_dut())
+# if __name__ == "__main__":
+#     print(check_FW_dut())
