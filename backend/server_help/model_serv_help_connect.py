@@ -33,10 +33,12 @@ serv_stor = ConnectStorage()
 
 
 class ConnectSrvHelp():
-    """Class represents connect and disconnect actions for Node."""
+    """Class represents connect and disconnect actions 
+        for server UbuntuNS 10.27.193.101.
+    """
 
     def __init__(self, log=True):
-        """Init Connect-class."""
+        """Init Connect-class to server UbuntuNS 10.27.193.101."""
         
         try:
             with open("../server_help/constants_connect.yaml") as f2:
@@ -71,6 +73,7 @@ class ConnectSrvHelp():
                 style='fail')
     
     def get_img_from_store(self):
+        """Получить свежую прошивку с сервера прошивок ci-storage.opk-bulat.ru."""
         path_img, img_name = serv_stor.get_name_last_FW_path()
         print(path_img)
         
@@ -82,6 +85,7 @@ class ConnectSrvHelp():
         # print(output)
 
     def up_http_serv(self):
+        """Поднять http_serv в директории с прошивкой."""
         output = self.ssh.send_command_timing('cd OPT/HelmetOS/BR100/')
         # print(output)
         output = self.ssh.send_command_timing('sudo python3 -m http.server 80')

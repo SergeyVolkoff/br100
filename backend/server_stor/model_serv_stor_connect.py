@@ -17,10 +17,10 @@ from constants_br100.constants import (
 INVALID_INPUT = "Invalid input detected"
 
 class ConnectStorage():
-    """Class represents connect and disconnect actions for Node."""
+    """Class represents connect and disconnect actions for git-ci-storage."""
 
     def __init__(self, log=True):
-        """Init Connect-class."""
+        """Init Connect-class for git-ci-storage."""
         
         try:
             with open("../server_stor/constants_connect.yaml") as f2:
@@ -35,7 +35,7 @@ class ConnectStorage():
                     style='fail')
             exit()
     def check_connection(self, log=True):
-        """Check connection to Server."""
+        """Check connection to Server git-ci-storage."""
         if log:
             CONSOLE.print(
                 'Пробую подключиться к', self.VALUE_CONS_CONNECT['ip'],

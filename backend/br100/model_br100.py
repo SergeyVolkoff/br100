@@ -30,7 +30,7 @@ from ping3 import ping
 
 
 class ConnectBR():
-    """Class represents connect and disconnect actions for Node."""
+    """Класс описыват подключение к коммутатору br100."""
 
     def __init__(self, log=True):
         """Init Connect-class."""
@@ -151,6 +151,7 @@ class ConnectBR():
         return ip_eth0
 
     def sendFWfromHelpSRV(self):
+        '''Получает прошивку свежую прошивку с UbuntuNS 10.27.193.101.'''
         with open("../server_help/constants_connect.yaml") as f2:
                 self.VALUE_CONS_CONNECT_ser = yaml.safe_load(f2)
         ip_HelpSRV = (self.VALUE_CONS_CONNECT_ser['ip'])
@@ -168,6 +169,7 @@ class ConnectBR():
         return output
     
     def reboot_DUT(self):
+        '''Перезагрузка коммутатора безусловная'''
         self.check_connection(self.VALUE_CONS_CONNECT)
         self.ssh.enable()
         result_reboot = self.ssh.send_command_timing('reload')

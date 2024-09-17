@@ -1,12 +1,15 @@
 """ Тесты проверки поддержки команд show."""
+import os
+import sys
+
+import allure
 import pytest
 import yaml
-import sys
-import os
-import allure
+
 sys.path.insert(1, os.path.join(sys.path[0],'..'))
 # print(sys.path)
 from checks.check_commands_show import *
+
 
 # @pytest.fixture
 def generate_cmd_reply():
@@ -65,6 +68,7 @@ def test_check_change_hostname(hostname,):
 def test_check_logging_file():
      '''Тест проверки создания файла логгирования.'''
      assert check_logging_file()==True, f'Логиррование не ведется или ведется не в файл logs!'
+
 
 # if __name__ == "__main__":
 #     print(test_check_commands_show())
