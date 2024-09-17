@@ -31,7 +31,7 @@ run_check_fw:
         - pip install -r backend/requirements.txt
     script:
         - cd backend/tests
-        - pytest -v --html=report_html/BULAT_TEST_FW.html --alluredir=allure-results test_fw.py 
+        - pytest -v --html=report_html/BULAT_TEST_FW.html --alluredir=allure-results_fw test_fw.py 
         # - allure generate -c allure-results -o allure-report
     after_script:
         - cd backend/tests
