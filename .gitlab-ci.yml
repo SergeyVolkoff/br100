@@ -10,32 +10,32 @@ default:
     - br100
 
 stages:
-    # - upgrade_check_fw
+    - upgrade_check_fw
     - test
     - report
     
-# run_check_fw:
-#     stage: upgrade_check_fw
-#     image: python
-#     artifacts:
-#       when: always
-#       expire_in: 5 days
-#       paths:
-#           - backend/tests/allure-report_fw
-#           - backend/tests/report_html_fw
-#     before_script:
-#         - apt-get update
-#         - apt install -y openjdk-17-jdk openjdk-17-jre
-#         - wget https://github.com/allure-framework/allure2/releases/download/2.30.0/allure-2.30.0.tgz && tar -zxvf allure-2.30.0.tgz -C /opt/ && ln -s /opt/allure-2.30.0/bin/allure /usr/bin/allure
-#         - pip install --upgrade pip
-#         - pip install -r backend/requirements.txt
-#     script:
-#         - cd backend/tests
-#         - pytest -v --html=report_html/BULAT_TEST_FW.html --alluredir=allure-results test_fw.py 
-#         # - allure generate -c allure-results -o allure-report
-#     after_script:
-#         - cd backend/tests
-#         - allure generate -c allure-results_fw -o allure-report_fw
+run_check_fw:
+    stage: upgrade_check_fw
+    image: python
+    artifacts:
+      when: always
+      expire_in: 5 days
+      paths:
+          - backend/tests/allure-report_fw
+          - backend/tests/report_html_fw
+    before_script:
+        - apt-get update
+        - apt install -y openjdk-17-jdk openjdk-17-jre
+        - wget https://github.com/allure-framework/allure2/releases/download/2.30.0/allure-2.30.0.tgz && tar -zxvf allure-2.30.0.tgz -C /opt/ && ln -s /opt/allure-2.30.0/bin/allure /usr/bin/allure
+        - pip install --upgrade pip
+        - pip install -r backend/requirements.txt
+    script:
+        - cd backend/tests
+        - pytest -v --html=report_html/BULAT_TEST_FW.html --alluredir=allure-results test_fw.py 
+        # - allure generate -c allure-results -o allure-report
+    after_script:
+        - cd backend/tests
+        - allure generate -c allure-results_fw -o allure-report_fw
 
 run_test:
     stage: test
@@ -63,7 +63,7 @@ pages:
   stage: report
   needs:
     - run_test
-    # - run_check_fw
+    - run_check_fw
   script:
     # - cd ../../
     - mkdir allure-report_public
