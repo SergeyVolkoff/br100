@@ -1,31 +1,33 @@
 """Base class for switches BR100."""
 import datetime as dt
-import re
-import time
-from netmiko import (
-    ConnectHandler,
-    NetmikoTimeoutException,
-    NetmikoAuthenticationException
-)
-import sys
 import os
+import re
+import sys
+import time
+from string import Template
+
+import pandas as pd
+from netmiko import (ConnectHandler, NetmikoAuthenticationException,
+                     NetmikoTimeoutException)
+
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 sys.path.insert(1, os.path.join(sys.path[0], '../..'))
 
 from server_stor.model_serv_stor_connect import ConnectStorage
+
 serv_stor = ConnectStorage()
 
 # sys.path.append(os.getcwd())
 # print("***",sys.path)
 import yaml  # noqa: E402
-from constants_br100.constants import (
-    CONSOLE,
-)
+from constants_br100.constants import CONSOLE
+
 # Constants
 
 INVALID_INPUT = "Invalid input detected"
 
 from ping3 import ping
+
 
 class ConnectBR():
     """Class represents connect and disconnect actions for Node."""
@@ -37,6 +39,8 @@ class ConnectBR():
             with open("../constants_br100/constants_connect.yaml") as f2:
                 self.VALUE_CONS_CONNECT = yaml.safe_load(f2)
             self.ssh = ConnectHandler(**self.VALUE_CONS_CONNECT)
+            # Внимание - впереди КОСТЫЛЬ!
+            self.ssh.send_command_timing('imish')
         except ConnectionRefusedError:
             CONSOLE.print(
                     "*" * 5, "Error connection to :",
@@ -86,7 +90,7 @@ class ConnectBR():
             exit()
 
     def sh_ver(self):
-        ""
+        '''Проверка версии прошивки '''
         self.check_connection(self.VALUE_CONS_CONNECT)
         self.ssh.enable()
         try:
@@ -122,18 +126,19 @@ class ConnectBR():
         return temp
             
     def get_date_FW(self):
-        '''Сравниваем текущую дату и дату установленой прошивки
-        если тек дата больше - вернет Тру.'''
+        '''Возвращает дату установленой прошивки.'''
+        
+        self.ssh.enable()
         output_cli = self.ssh.send_command_timing('show version')
-        except_output = 'MSK (?P<date>.+)'
-        regex_output = re.search(except_output,output_cli)
+        regex_output = re.search('MSK (?P<date>.+)',output_cli)
         dateFW = regex_output.group('date')
-        return(dateFW)
+        return dateFW
         # date_curent_F = dt.datetime.now()
         # dateFW_F = dt.datetime.strptime(dateFW,"%d/%m/%Y")
         # return(date_curent_F>dateFW_F)
     
     def get_ip_eth0(self):
+        '''Получить ip адрес eth0-итерфейса.'''
         self.check_connection(self.VALUE_CONS_CONNECT)
         self.ssh.enable()
         temp = self.ssh.send_command('sh ip interface eth0 brief',read_timeout=1)
@@ -147,17 +152,29 @@ class ConnectBR():
 
     def sendFWfromHelpSRV(self):
         with open("../server_help/constants_connect.yaml") as f2:
-                self.VALUE_CONS_CONNECT = yaml.safe_load(f2)
-        ip_HelpSRV = (self.VALUE_CONS_CONNECT['ip'])
+                self.VALUE_CONS_CONNECT_ser = yaml.safe_load(f2)
+        ip_HelpSRV = (self.VALUE_CONS_CONNECT_ser['ip'])
         path_img, img_name = serv_stor.get_name_last_FW_path()
-        cmnd_load_FW = f'copy image {ip_HelpSRV}/{img_name}.img'
+        cmnd_load_FW = f"copy image {ip_HelpSRV}/{img_name}"
         print("***",cmnd_load_FW)
-        output = self.ssh.send_command_timing(
-            cmnd_load_FW,strip_command=False
-            )
-        return output
 
+        self.check_connection(self.VALUE_CONS_CONNECT)
+        print(self.ssh.enable())
+        # self.ssh.send_command_timing('enable')
+        output = self.ssh.send_command_timing(
+            cmnd_load_FW
+            )
+        # result_ex = self.ssh.disconnect()
+        return output
+    
+    def reboot_DUT(self):
+        self.check_connection(self.VALUE_CONS_CONNECT)
+        self.ssh.enable()
+        result_reboot = self.ssh.send_command_timing('reload')
+        result_reboot1 = self.ssh.send_command_timing('y')
+        result_reboot2 = self.ssh.send_command_timing('y')
+        print(result_reboot, result_reboot1, result_reboot2)
 
 if __name__=="__main__":
     br100 = ConnectBR()
-    print(br100.sendFWfromHelpSRV())
+    print(br100.get_date_FW())

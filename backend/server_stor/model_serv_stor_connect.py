@@ -13,9 +13,7 @@ import yaml
 from constants_br100.constants import (
     CONSOLE,
 )
-# Constants
-# from br100.model_br100 import ConnectBR
-# br100 = ConnectBR()
+
 INVALID_INPUT = "Invalid input detected"
 
 class ConnectStorage():
@@ -69,7 +67,7 @@ class ConnectStorage():
         return maxDate
 
     def get_name_last_FW_path(self):
-        '''Получить на git-ci-storage name последнего обновления прошивки.'''
+        '''Получить на git-ci-storage name, path последнего обновления прошивки.'''
         maxDate = self.get_date_last_FW()
         # Формируем имя нужной прошивки и директории ее хранения
         name_tar = 'images_BR100-24F6X_'+maxDate+'.tar'
@@ -80,20 +78,23 @@ class ConnectStorage():
         result_unpack = self.ssh.send_command_timing(command_unpack)
         # Извлекаем список имиджей после распаковки
         output_data = self.ssh.send_command_timing(f'ls -a {name_dir}/output/images')
-        pattern_name_efi = '(?P<img_name>\S+(?<=_EFI))'
+        # pattern_name_efi = '(?P<img_name>\S+(?<=_EFI.img))'
+        pattern_name_efi = '(?P<img_name>img_p1_E\S+)'
         reg_output= re.search (pattern_name_efi, output_data)
         # Извлекаем имя нужного нам имиджа
         img_name = reg_output.group('img_name')
-        print(img_name)
         # Извлекаем имя path
         path_img = f'{name_dir}/output/images/'
         return path_img, img_name
     
+    def remove_unpack_FW(self):
+        path_img, img_name = self.get_name_last_FW_path()
+        print(path_img,img_name)
+        # result_remove = 
+
         
 
 
 if __name__=="__main__":
     str = ConnectStorage()
-    # print(str.check_connection())
-    
-    print(str.get_name_last_FW_path())
+    print(str.remove_unpack_FW())

@@ -1,18 +1,16 @@
-import sys
 import os
+import sys
+import time
+
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 sys.path.insert(1, os.path.join(sys.path[0], '../..'))    
 import pexpect
-from netmiko import (
-    ConnectHandler,
-    NetmikoTimeoutException,
-    NetmikoAuthenticationException
-)
 import yaml
+from constants_br100.constants import CONSOLE
+from netmiko import (ConnectHandler, NetmikoAuthenticationException,
+                     NetmikoTimeoutException)
 from server_stor.model_serv_stor_connect import ConnectStorage
-from constants_br100.constants import (
-    CONSOLE,
-)
+
 serv_stor = ConnectStorage()
 
 # def connect_help_serv():
@@ -77,17 +75,18 @@ class ConnectSrvHelp():
         print(path_img)
         
         comand_scp = f"scp storage@git-ci-storage.opk-bulat.ru:~/{path_img}*EFI.img ~/OPT/HelmetOS/BR100"
-        print("**",comand_scp)
+        # print("**",comand_scp)
         output_scp = self.ssh.send_command_timing(comand_scp)
-        print(output_scp)
+        # print(output_scp)
         output = self.ssh.send_command_timing('storage')
-        print(output)
+        # print(output)
 
     def up_http_serv(self):
         output = self.ssh.send_command_timing('cd OPT/HelmetOS/BR100/')
-        print(output)
+        # print(output)
         output = self.ssh.send_command_timing('sudo python3 -m http.server 80')
-        print(output)
+        time.sleep(30)
+        # print(output)
 
 
 if __name__=="__main__":
