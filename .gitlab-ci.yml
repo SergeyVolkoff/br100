@@ -14,7 +14,7 @@ stages:
     - report
 ####
 run_check_fw:
-    stage: upgrade_check_fw.pre
+    stage: .pre
     image: python
     artifacts:
       when: always
