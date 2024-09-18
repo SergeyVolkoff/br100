@@ -36,7 +36,7 @@ task_ids = generate_cmd_reply()[1]
 def test_check_execute_command(commnd_from_file, expect_output_fr_file):
         '''Тест проверки команд show from file'''
         print(commnd_from_file)
-        assert check_execute_command(
+        assert check_execute_command(  # noqa: E712, F405
         commnds_sh=commnd_from_file, 
         expect_output=expect_output_fr_file)==True,\
         f'**Результат использования команды:f"{commnd_from_file}" не соответствует ожиданиям'

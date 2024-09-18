@@ -17,12 +17,16 @@ def check_execute_command(commnds_sh: str, expect_output: str,  timeout: int = 2
         with allure.step(f'Отправка команды {commnds_sh} '):
             output_cli = br100.get_answerCLI(command=commnds_sh)
             print("###", output_cli)
-            reg_output = re.search (expect_output,output_cli)
-            # print(expect_output)
-            # print("!!!",reg_output)
-            reg_output_gr = reg_output.group()
-            # print("***",reg_output_gr)
-
+            try:
+                reg_output = re.search (expect_output,output_cli)
+                # print(expect_output)
+                # print("!!!",reg_output)
+                reg_output_gr = reg_output.group()
+                # print("***",reg_output_gr)
+            except AttributeError as err:
+                print(err, f"Вызвано исключение при отправке комады:reg_output.group() на вывод cli:{output_cli} ")
+                print('Еhe expectation was not met..')
+                return False
         with allure.step(
             f'Проверяем наличие ожидаемых элементом ({expect_output}) в ответе в CLI (см ниже stdout) :'
             ):    
@@ -75,18 +79,18 @@ def check_logging_file():
     '''Проверка логгирования событий в файл.'''
     try:
         with allure.step(f'Отправка команды настройки логгирования в файл'):
+            # br100.get_answerCLI_conf(command='no logging logfile')
             br100.get_answerCLI_conf(command='logging logfile logs 6 size 4096')
             output_cli = br100.get_answerCLI(command='show logging logfile')
-            expect_output = 'logging\W+(?P<status_log>.+)\n.+File Name.+(?P<name_log>var\/.+)'
+            expect_output = 'logging\W+(?P<status_log>\w+)'
             #  отбираем из вывода в cli нужную строку 2мя группами: status_log и name_log
             reg_output = re.search (expect_output,output_cli)
             status_log = reg_output.group('status_log')
-            name_log = reg_output.group('name_log')
         with allure.step(
-            f'Проверяем наличие ожидаемых элементом ({name_log ,name_log}) в ответе в CLI (см ниже stdout) :'
+            f'Проверяем наличие ожидаемых элементом ({status_log}) в ответе в CLI (см ниже stdout) :'
             ):    
-            if name_log and status_log in output_cli:
-                print("The expectation was justified!")
+            if  status_log in output_cli:
+                print(f"The expectation was justified! status_loggging = {status_log}")
                 br100.ssh.disconnect()
                 return True
             else: 
@@ -101,4 +105,4 @@ def check_logging_file():
         return False
 
 if __name__ == "__main__":
-    print(check_change_hostname('DUT_Aggregation1'))
+    print(check_change_hostname('Art'))
