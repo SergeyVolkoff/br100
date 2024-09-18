@@ -1,11 +1,6 @@
-import re
-import sys
-import os
-sys.path.insert(1, os.path.join(sys.path[0],'..'))
-
-
 
 import IxNetwork
+
 ixNet = IxNetwork.IxNet()
 
 host = '10.27.192.176'
@@ -28,4 +23,3 @@ temp = ixNet.readFrom(file)
 print("*",temp)
 temp = ixNet.execute('loadConfig', temp)
 print("**",temp)
-

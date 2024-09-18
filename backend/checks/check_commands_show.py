@@ -1,7 +1,9 @@
-import allure
+import os
 import re
 import sys
-import os
+
+import allure
+
 sys.path.insert(1, os.path.join(sys.path[0],'..'))
 from br100.model_br100 import ConnectBR
 from cfg_br100.cfg_reset import ConfigReset
