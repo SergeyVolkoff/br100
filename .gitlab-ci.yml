@@ -22,7 +22,7 @@ run_check_fw:
       expire_in: 5 days
       paths:
           # - backend/tests/allure-report_fw
-          - backend/tests/report_html_fw
+          - backend/tests/report_html
     before_script:
         - apt-get update
         # - apt install -y openjdk-17-jdk openjdk-17-jre
