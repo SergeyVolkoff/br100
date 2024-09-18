@@ -19,7 +19,7 @@ mdurl==0.1.2
 netmiko==4.4.0
 ntc-templates==6.0.0
 packaging==24.1
-pandas==2.0.3
+pandas
 paramiko==3.4.0
 pexpect==4.9.0
 ping3==4.0.8

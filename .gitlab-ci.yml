@@ -25,24 +25,26 @@ run_check_fw:
           - backend/tests/report_html_fw
     before_script:
         - apt-get update
-        - apt install -y openjdk-17-jdk openjdk-17-jre
-        - wget https://github.com/allure-framework/allure2/releases/download/2.30.0/allure-2.30.0.tgz && tar -zxvf allure-2.30.0.tgz -C /opt/ && ln -s /opt/allure-2.30.0/bin/allure /usr/bin/allure
+        # - apt install -y openjdk-17-jdk openjdk-17-jre
+        # - wget https://github.com/allure-framework/allure2/releases/download/2.30.0/allure-2.30.0.tgz && tar -zxvf allure-2.30.0.tgz -C /opt/ && ln -s /opt/allure-2.30.0/bin/allure /usr/bin/allure
         - pip install --upgrade pip
         - pip install -r backend/requirements.txt
     script:
         - cd backend/tests
-        - pytest -v --html=report_html/BULAT_TEST_FW.html --alluredir=allure-results_fw test_fw.py 
+        - pytest -v --html=report_html/BULAT_TEST_FW.html test_fw.py 
+        # - pytest -v --html=report_html/BULAT_TEST_FW.html --alluredir=allure-results_fw test_fw.py 
         # - allure generate -c allure-results -o allure-report
     after_script:
         - cd backend/tests
-        - allure generate -c allure-results_fw -o allure-report_fw
+        # - allure generate -c allure-results_fw -o allure-report_fw
 
 run_test:
     stage: test
     image: python
     artifacts:
       when: always
-      expire_in: 5 days
+      expire_in: 5 days7-jdk openjdk-17-jre
+        - wget https://github.com/a
       paths:
           - backend/tests/allure-report
           - backend/tests/report_html
