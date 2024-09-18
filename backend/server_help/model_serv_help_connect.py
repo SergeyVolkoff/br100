@@ -82,7 +82,7 @@ class ConnectSrvHelp():
         output_scp = self.ssh.send_command_timing(comand_scp)
         # print(output_scp)
         output = self.ssh.send_command_timing('storage')
-        # print(output)
+        print(output)
 
     def up_http_serv(self):
         """Поднять http_serv в директории с прошивкой."""
@@ -92,6 +92,12 @@ class ConnectSrvHelp():
         time.sleep(30)
         # print(output)
 
+    def down_http_serv(self):
+        """Поднять http_serv в директории с прошивкой."""
+        output = self.ssh.send_command_timing('cd OPT/HelmetOS/BR100/')
+        # print(output)
+        output = self.ssh.send_command_timing('sudo fuser -k 80/tcp')
+        time.sleep(30)
 
 if __name__=="__main__":
     srv_help = ConnectSrvHelp()

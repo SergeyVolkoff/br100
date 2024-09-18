@@ -4,7 +4,7 @@ import re
 import sys
 import time
 
-import allure
+# import allure
 import pandas as pd
 
 sys.path.insert(1, os.path.join(sys.path[0],'..'))
@@ -64,14 +64,13 @@ def check_FW_dut():
         result_get_img_store = serv_help.get_img_from_store()
         print('result_get_img_store=',result_get_img_store)
 
-        # Поднимаем на 30 сек http сервер в директории с прошивкой
+        # Поднимаем http сервер в директории с прошивкой
         result_up_http_serv = serv_help.up_http_serv()
         print('result_up_http_serv=',result_up_http_serv)
 
         #  Копируем прошивку с http сервер на DUT 
         result_sendFWfromHelpSRV = br100.sendFWfromHelpSRV()
         print(result_sendFWfromHelpSRV)
-        # br100.ssh.disconnect()
 
         # Перезагружаем коммутатор, применяя прошивку
         result_reboot = br100.reboot_DUT()
@@ -80,13 +79,17 @@ def check_FW_dut():
         br100.ssh.send_command_timing('admin')
         br100.ssh.send_command_timing('admin')
 
+        # Отключаем http сервер в директории с прошивкой
+        result_down_http_serv = serv_help.down_http_serv()
+        print('result_down_http_serv=',result_down_http_serv)
+
         # Снова сравниваем даты прошивок на DUT и на git-ci-storage
         dateFW_DUT1 = br100.get_date_FW()
-        # print("dateFW_DUT1 = ", dateFW_DUT1)
+        print("dateFW_DUT1 = ", dateFW_DUT1)
         dateFW_DUT1_dt = dt.datetime.strptime(dateFW_DUT1,"%d/%m/%Y")
-        # print("dateFW_DUT1_dt = ",dateFW_DUT1_dt)
+        print("dateFW_DUT1_dt = ",dateFW_DUT1_dt)
         dateFW_DUT1_dt = pd.to_datetime(dateFW_DUT1_dt)
-        # print("dateFW_stor_dt = ", dateFW_stor_dt)
+        print("dateFW_stor_dt = ", dateFW_stor_dt)
 
         # Если даты совпали - завершаем
         if dateFW_DUT1_dt == dateFW_stor_dt:
@@ -113,5 +116,5 @@ def check_FW_dut():
         Датa прошивки на git-ci-storage - {dateFW_stor}')
         return True
 
-# if __name__ == "__main__":
-#     print(check_FW_dut())
+if __name__ == "__main__":
+    print(check_FW_dut())
