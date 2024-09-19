@@ -143,7 +143,7 @@ class ConnectBR():
         self.ssh.enable()
         temp = self.ssh.send_command('sh ip interface eth0 brief',read_timeout=1)
         print(temp)
-        temp1 = re.search('eth0\s+\*(?P<ip_eth0>\S+)',temp)
+        temp1 = re.search(r'eth0\s+\*(?P<ip_eth0>\S+)',temp)
         try:
             ip_eth0 = temp1.group('ip_eth0')
         except NetmikoTimeoutException as err:

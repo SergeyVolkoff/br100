@@ -1,6 +1,11 @@
 show system uptime, up
+show system-information cpu, Intel
+sh system-information cpu-load, CPU Usage
 show arp, Address\s+Age\s+MAC Address\s+Interface\s+State
 show clock, UTC
 show running-config, !Last configuration
 show interface brief, eth0
 show version, BulatOS\s\S+ (?P<ver_HW>\S+)
+sh hardware-information all, HARD DISK INFORMATION
+sh chto-nibud-ne-validnoe, Invalid input detected
+sh chto-nibud-ne-validnoe2, weit_FAIL

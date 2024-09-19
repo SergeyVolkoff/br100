@@ -63,9 +63,9 @@ run_test:
         # - allure generate -c allure-results -o allure-report
 pages:
   stage: report
-  needs:
-    - run_test
-    - run_check_fw
+  # needs:
+  #   - run_test
+  #   - run_check_fw
   script:
     # - cd ../../
     # - mkdir allure-report_public

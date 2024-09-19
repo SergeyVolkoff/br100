@@ -14,11 +14,11 @@ br100.check_connection()
     
 def check_execute_command(commnds_sh: str, expect_output: str,  timeout: int = 2):
     '''Сравнивает фактический результат выполнения команды show с ожидаемым'''
-    print("Test 2", "Проверка команды:", sep='\n')
+    print("Test 2", f"Проверка команды:{commnds_sh}", sep='\n')
     try:
         with allure.step(f'Отправка команды {commnds_sh} '):
             output_cli = br100.get_answerCLI(command=commnds_sh)
-            print("###", output_cli)
+            print("В cli получили:", output_cli)
             try:
                 reg_output = re.search (expect_output,output_cli)
                 # print(expect_output)
@@ -27,16 +27,16 @@ def check_execute_command(commnds_sh: str, expect_output: str,  timeout: int = 2
                 # print("***",reg_output_gr)
             except AttributeError as err:
                 print(err, f"Вызвано исключение при отправке комады:reg_output.group() на вывод cli:{output_cli} ")
-                print('Еhe expectation was not met..')
+                print('Ожидания и вывод в cli НЕ совпадают..')
                 return False
         with allure.step(
             f'Проверяем наличие ожидаемых элементом ({expect_output}) в ответе в CLI (см ниже stdout) :'
             ):    
             if reg_output_gr in output_cli:
-                print("The expectation was justified!")
+                print("Ожидания и вывод в cli совпадают!")
                 return True
             else: 
-                print('Еhe expectation was not met')
+                print('Ожидания и вывод в cli НЕ совпадают!')
                 return False
 
     except ValueError as err:
@@ -61,19 +61,18 @@ def check_change_hostname(new_hostname):
                 regex_output_gr = regex_output.group()
                 if regex_output_gr == new_hostname:
                     # Сравниваем полученное имя и введенное 
-                    print("The expectation was justified!")
+                    print("Ожидания и вывод в cli совпадают!")
                     return True
                 else:
                     return False
             except AttributeError as err:
                 print(err, "Вызвано исключение при отправке комады")
                 # Возвращаем имя DUTu
-                print('Еhe expectation was not met..')
+                print('Ожидания и вывод в cli НЕ совпадают..')
                 return False
         
     except ValueError as err:
         print(err, "Вызвано исключение при отправке комады")
-        print('Еhe expectation was not met')
         return False
 
 
@@ -92,11 +91,11 @@ def check_logging_file():
             f'Проверяем наличие ожидаемых элементом ({status_log}) в ответе в CLI (см ниже stdout) :'
             ):    
             if  status_log in output_cli:
-                print(f"The expectation was justified! status_loggging = {status_log}")
+                print(f"Ожидания и вывод в cli совпадают! status_loggging = {status_log}")
                 br100.ssh.disconnect()
                 return True
             else: 
-                print('Еhe expectation was not met')
+                print('Ожидания и вывод в cli НЕ совпадают!')
                 br100.ssh.disconnect()
                 return False
         

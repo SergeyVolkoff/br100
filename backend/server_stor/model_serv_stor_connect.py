@@ -57,7 +57,7 @@ class ConnectStorage():
     def get_date_last_FW(self):
         '''Получить на git-ci-storage дату последнего обновления прошивки.'''
         output_data = self.ssh.send_command_timing('ls -a git-ci-storage/BR100-24F6X')
-        patern_tar = 'images_BR100-24F6X_(?P<date_fw>\d+\-\d+\-\d+)'
+        patern_tar = r'images_BR100-24F6X_(?P<date_fw>\d+\-\d+\-\d+)'
         #  Получаем список прошивок
         date_list = re.findall(patern_tar, output_data)
         maxDate = date_list[0]  # выбирает максимальной первую дату
@@ -79,7 +79,7 @@ class ConnectStorage():
         # Извлекаем список имиджей после распаковки
         output_data = self.ssh.send_command_timing(f'ls -a {name_dir}/output/images')
         # pattern_name_efi = '(?P<img_name>\S+(?<=_EFI.img))'
-        pattern_name_efi = '(?P<img_name>img_p1_E\S+)'
+        pattern_name_efi = r'(?P<img_name>img_p1_E\S+)'
         reg_output= re.search (pattern_name_efi, output_data)
         # Извлекаем имя нужного нам имиджа
         img_name = reg_output.group('img_name')
