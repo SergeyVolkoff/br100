@@ -1,4 +1,4 @@
-""" Тесты проверки поддержки команд show."""
+""" Тесты проверки поддержки команд show на коммутаторе."""
 import os
 import sys
 
@@ -34,7 +34,9 @@ task_ids = generate_cmd_reply()[1]
 @allure.story('1.проверка команд show.')
 @pytest.mark.parametrize('commnd_from_file, expect_output_fr_file', data_for_check, ids=task_ids)
 def test_check_execute_command(commnd_from_file, expect_output_fr_file):
-        '''Тест проверки команд show from file'''
+        '''Тестирование выполнения команд show из заранее подготовленного файла.
+        Цель - убедиться в базовой работоспособности коммутатора после обновления прошивки.
+        '''
         print(commnd_from_file)
         assert check_execute_command(  # noqa: E712, F405
         commnds_sh=commnd_from_file, 
@@ -60,13 +62,13 @@ task_ids = ['Verified name {0}, Name length = {1}'.format(t,len(t))
 @allure.story('2.проверка команды смены имени хоста.')
 @pytest.mark.parametrize('hostname',name_host,  ids=task_ids)
 def test_check_change_hostname(hostname,):
-     '''Тест проверки команды смены имени хоста'''
+     '''Тестирование  смены имени хоста'''
      assert check_change_hostname (new_hostname=hostname)==True, f'сменить имя не удалось!'
 
 @allure.feature ('Тесты логгирования событий.')
 @allure.story('3.проверка создания файла логгирования.')
 def test_check_logging_file():
-     '''Тест проверки создания файла логгирования.'''
+     '''Тестирование создания файла логгирования.'''
      assert check_logging_file()==True, f'Логиррование не ведется или ведется не в файл logs!'
 
 
