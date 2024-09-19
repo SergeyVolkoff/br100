@@ -23,8 +23,9 @@ pytest -v --html=report_html/BULAT_TEST.html --alluredir=allure-reports test_com
 allure serve allure-reports
 ```
 Для использования с платформы git.opk-bulat:
-1. Перейти на платформу,зайти в проект br100, выбрать Pipelines нажать RUN Pipeline.
-2. Дождаться выполнения.
-
+1. Перейти на платформу,зайти в проект br100, выбрать Pipelines нажать вверху справа RUN Pipeline.
+2. Дождаться выполнения всех шагов Pipelines.
+3. Загрузить последний артефакт (кнопка Download)
+4. Не распаковывая загруженный архив, открыть файлы отчетов (имена отчетов начинаются с BULAT_TEST_...html)
 ### Использованные технологии:
 CI/CD, Pytest, Pytest-html, paramiko==2.11.1, netmiko==4.3.0, Allure, Docker (при создании Runners на git.opk-bulat  на сервере 10.27.202.153 все тестирвоание разворачивается в контейнере).
