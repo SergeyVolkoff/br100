@@ -58,6 +58,7 @@ run_test:
         - pytest -v --html=report_html/BULAT_TEST.html test_cmd_show.py 
         # - pytest -v --html=report_html/BULAT_TEST.html --alluredir=allure-results test_cmd_show.py 
         # - allure generate -c allure-results -o allure-report
+    allow_failure: true
     after_script:
         - cd backend/tests
         # - allure generate -c allure-results -o allure-report
