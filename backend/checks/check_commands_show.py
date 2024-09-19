@@ -83,7 +83,7 @@ def check_logging_file():
             # br100.get_answerCLI_conf(command='no logging logfile')
             br100.get_answerCLI_conf(command='logging logfile logs 6 size 4096')
             output_cli = br100.get_answerCLI(command='show logging logfile')
-            expect_output = 'logging\W+(?P<status_log>\w+)'
+            expect_output = r'logging\W+(?P<status_log>\w+)'
             #  отбираем из вывода в cli нужную строку 2мя группами: status_log и name_log
             reg_output = re.search (expect_output,output_cli)
             status_log = reg_output.group('status_log')
