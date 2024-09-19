@@ -63,9 +63,9 @@ run_test:
         # - allure generate -c allure-results -o allure-report
 pages:
   stage: report
-  # needs:
-  #   - run_test
-  #   - run_check_fw
+  needs:
+    - run_test
+    - run_check_fw
   script:
     # - cd ../../
     # - mkdir allure-report_public
@@ -74,7 +74,7 @@ pages:
     - cp -r backend/tests/report_html/* html-report_public
     
   artifacts:
-    when: on_success
+    when: always
     expire_in: never
     paths:
         # - allure-report_public
