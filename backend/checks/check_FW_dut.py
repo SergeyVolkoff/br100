@@ -40,10 +40,10 @@ def check_FW_dut():
     # Приводим даты к виду datetime
     dateFW_DUT_dt = dt.datetime.strptime(dateFW_DUT,"%d/%m/%Y")
     dateFW_DUT_dt = pd.to_datetime(dateFW_DUT_dt)
-    print("dateFW_DUT_dt = ", dateFW_DUT_dt)
+    # print("dateFW_DUT_dt = ", dateFW_DUT_dt)
     dateFW_stor_dt = dt.datetime.strptime(dateFW_stor,"%Y-%m-%d")
     dateFW_stor_dt = pd.to_datetime(dateFW_stor_dt)
-    print("dateFW_stor_dt = ", dateFW_stor_dt)
+    # print("dateFW_stor_dt = ", dateFW_stor_dt)
 
     # Сравниваем даты прошивок на DUT и на git-ci-storage
     # если на DUT дата раньше вернет True
@@ -57,35 +57,43 @@ def check_FW_dut():
               Датa прошивки на git-ci-storage - {dateFW_stor}'
                 )
         path_img, img_name = serv_stor.get_name_last_FW_path()
-        print('path_img, img_name=',path_img, img_name)
+        # print('path_img, img_name=',path_img, img_name)
 
         # Копируем прошивку на сервер 10.27.193.101 где будет http сервер
         result_get_img_store = serv_help.get_img_from_store()
-        print('result_get_img_store=',result_get_img_store)
+        # print('result_get_img_store=',result_get_img_store)
 
-        # Поднимаем на 30 сек http сервер в директории с прошивкой
+        # Поднимаем http сервер в директории с прошивкой
         result_up_http_serv = serv_help.up_http_serv()
-        print('result_up_http_serv=',result_up_http_serv)
+        # print('result_up_http_serv=',result_up_http_serv)
 
         #  Копируем прошивку с http сервер на DUT 
         result_sendFWfromHelpSRV = br100.sendFWfromHelpSRV()
-        print(result_sendFWfromHelpSRV)
+        # print(result_sendFWfromHelpSRV)
 
         # Перезагружаем коммутатор, применяя прошивку
         result_reboot = br100.reboot_DUT()
-        print('Dut reboot',result_reboot)
+        # print('Dut reboot',result_reboot)
         time.sleep(120)
         br100.ssh.send_command_timing('admin')
         br100.ssh.send_command_timing('admin')
+        
+        # Останавливам http сервер в директории с прошивкой
+        result_down_http_serv = serv_help.down_http_serv()
+        # print('result_down_http_serv=',result_down_http_serv)
 
         # Снова сравниваем даты прошивок на DUT и на git-ci-storage
         dateFW_DUT1 = br100.get_date_FW()
-        print("dateFW_DUT1 = ", dateFW_DUT1)
+        # print("dateFW_DUT1 = ", dateFW_DUT1)
         dateFW_DUT1_dt = dt.datetime.strptime(dateFW_DUT1,"%d/%m/%Y")
-        print("dateFW_DUT1_dt = ",dateFW_DUT1_dt)
+        # print("dateFW_DUT1_dt = ",dateFW_DUT1_dt)
         dateFW_DUT1_dt = pd.to_datetime(dateFW_DUT1_dt)
-        print("dateFW_stor_dt = ", dateFW_stor_dt)
+        # print("dateFW_stor_dt = ", dateFW_stor_dt)
 
+        # Удаляем распакованные прошивки в директории на git-ci-storage
+        result_remove_dirFW = serv_stor.remove_unpack_FW()
+        print('result_remove_dirFW = ',result_remove_dirFW)
+        
         # Если даты совпали - завершаем
         if dateFW_DUT1_dt == dateFW_stor_dt:
             print(f"Даты прошивки на DUT и git-ci-storage совпадают!\n\

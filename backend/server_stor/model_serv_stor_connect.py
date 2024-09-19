@@ -89,12 +89,17 @@ class ConnectStorage():
     
     def remove_unpack_FW(self):
         path_img, img_name = self.get_name_last_FW_path()
-        print(path_img,img_name)
-        # result_remove = 
+        pattern_name = r'(?P<dir_name>\S+(?<=)\d)'
+        reg_output= re.search (pattern_name, path_img)
+        dir_name = reg_output.group('dir_name')
+        print(dir_name)
+        command = f'rm -fr {dir_name}'
+        result_remove = self.ssh.send_command_timing(command)
+        print(result_remove)
 
         
 
 
 if __name__=="__main__":
     str = ConnectStorage()
-    print(str.remove_unpack_FW())
+    print(str.get_name_last_FW_path())
