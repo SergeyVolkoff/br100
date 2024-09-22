@@ -78,15 +78,34 @@ class ConnectSrvHelp():
         print(path_img)
         
         comand_scp = f"scp storage@git-ci-storage.opk-bulat.ru:~/{path_img}*EFI.img ~/OPT/HelmetOS/BR100"
-        # print("**",comand_scp)
+        print("**",comand_scp)
         output_scp = self.ssh.send_command_timing(comand_scp)
-        # print(output_scp)
+        print(output_scp)
+        output = self.ssh.send_command_timing('storage')
+        print(output)
+    
+    def get_img_from_store_850(self):
+        """Получить свежую прошивку с сервера прошивок ci-storage.opk-bulat.ru."""
+        path_img, img_name = serv_stor.get_name_last_FW_path_850()
+        print(path_img)
+        comand_scp = f"scp storage@git-ci-storage.opk-bulat.ru:~/{path_img}*EFI.img ~/OPT/HelmetOS/BR850"
+        print("**",comand_scp)
+        output_scp = self.ssh.send_command_timing(comand_scp)
+        print(output_scp)
         output = self.ssh.send_command_timing('storage')
         print(output)
 
     def up_http_serv(self):
         """Поднять http_serv в директории с прошивкой."""
         output = self.ssh.send_command_timing('cd OPT/HelmetOS/BR100/')
+        print(output)
+        output = self.ssh.send_command_timing('sudo python3 -m http.server 80')
+        time.sleep(30)
+        # print(output)
+
+    def up_http_serv_850(self):
+        """Поднять http_serv в директории с прошивкой."""
+        output = self.ssh.send_command_timing('cd OPT/HelmetOS/BR850/')
         # print(output)
         output = self.ssh.send_command_timing('sudo python3 -m http.server 80')
         time.sleep(30)
@@ -97,8 +116,13 @@ class ConnectSrvHelp():
         output = self.ssh.send_command_timing('cd OPT/HelmetOS/BR100/')
         # print(output)
         output = self.ssh.send_command_timing('sudo fuser -k 80/tcp')
-        time.sleep(30)
+
+    def down_http_serv_850(self):
+        """Поднять http_serv в директории с прошивкой."""
+        output = self.ssh.send_command_timing('cd OPT/HelmetOS/BR850/')
+        # print(output)
+        output = self.ssh.send_command_timing('sudo fuser -k 80/tcp')
 
 if __name__=="__main__":
     srv_help = ConnectSrvHelp()
-    print(srv_help.up_http_serv())
+    print(srv_help.get_img_from_store_850())

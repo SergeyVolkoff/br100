@@ -128,10 +128,18 @@ class ConnectBR():
     def get_date_FW(self):
         '''Возвращает дату установленой прошивки.'''
         
-        self.ssh.enable()
+        self.ssh.send_command_timing('enable')
         output_cli = self.ssh.send_command_timing('show version')
-        regex_output = re.search('MSK (?P<date>.+)',output_cli)
-        dateFW = regex_output.group('date')
+        
+        try:
+            regex_output = re.search('MSK (?P<date>.+)',output_cli)
+            dateFW = regex_output.group('date')
+        except AttributeError as err:
+            print(err, 
+                    f"Вызвано исключение при отправке комады:reg_output.group() на вывод cli:{output_cli} "
+                    )
+            print('Ожидания и вывод в cli НЕ совпадают..')
+        
         return dateFW
         # date_curent_F = dt.datetime.now()
         # dateFW_F = dt.datetime.strptime(dateFW,"%d/%m/%Y")
@@ -154,12 +162,28 @@ class ConnectBR():
         '''Получает прошивку свежую прошивку с UbuntuNS 10.27.193.101.'''
         with open("../server_help/constants_connect.yaml") as f2:
                 self.VALUE_CONS_CONNECT_ser = yaml.safe_load(f2)
+        self.check_connection(self.VALUE_CONS_CONNECT)
         ip_HelpSRV = (self.VALUE_CONS_CONNECT_ser['ip'])
         path_img, img_name = serv_stor.get_name_last_FW_path()
         cmnd_load_FW = f"copy image {ip_HelpSRV}/{img_name}"
-        print("***",cmnd_load_FW)
-
+        # print("***",cmnd_load_FW)
+        print(self.ssh.enable())
+        # self.ssh.send_command_timing('enable')
+        output = self.ssh.send_command_timing(
+            cmnd_load_FW
+            )
+        # result_ex = self.ssh.disconnect()
+        return output
+    
+    def sendFWfromHelpSRV_850(self):
+        '''Получает прошивку свежую прошивку с UbuntuNS 10.27.193.101.'''
+        with open("../server_help/constants_connect.yaml") as f2:
+                self.VALUE_CONS_CONNECT_ser = yaml.safe_load(f2)
         self.check_connection(self.VALUE_CONS_CONNECT)
+        ip_HelpSRV = (self.VALUE_CONS_CONNECT_ser['ip'])
+        path_img, img_name = serv_stor.get_name_last_FW_path_850()
+        cmnd_load_FW = f"copy image {ip_HelpSRV}/{img_name}"
+        # print("***",cmnd_load_FW)
         print(self.ssh.enable())
         # self.ssh.send_command_timing('enable')
         output = self.ssh.send_command_timing(
@@ -177,6 +201,33 @@ class ConnectBR():
         result_reboot2 = self.ssh.send_command_timing('y')
         print(result_reboot, result_reboot1, result_reboot2)
 
+    def check_model_DUT(self):
+        '''Возвращает модель коммутатора - br100, br850'''
+        output_cli = self.ssh.send_command_timing('sh ver')
+        all_interface = self.ssh.send_command_timing('show interface brief')
+        expect_output = r'(?P<model_DUT>BR\S+)'
+        try:
+            reg_output = re.search (expect_output,output_cli)
+            model_DUT = reg_output.group('model_DUT')
+            print("model_DUT=",model_DUT)
+        except AttributeError as err:
+            print(err, 
+                    f"Вызвано исключение при отправке комады:reg_output.group() на вывод cli:{all_interface} "
+                    )
+            print('Ожидания и вывод в cli НЕ совпадают..')
+        if 'BR100-24F6X' in model_DUT:
+            if re.search(r'xe48', all_interface): # убрать после устранения бага с именем прошивки на BR850
+                return 'br850'
+            if re.search(r'ge24', all_interface):
+                return 'br100'
+            else:
+                return f'Неизвестная модель!В cli {model_DUT}, но нет xe48.'
+        if 'BR850' in model_DUT:
+            if re.search(r'xe48', all_interface):
+                return 'br850'
+            else:
+                return f'Неизвестная модель!В cli {model_DUT}, но нет ge24.'
+            
 if __name__=="__main__":
     br100 = ConnectBR()
-    print(br100.get_date_FW())
+    print(br100.sendFWfromHelpSRV())
