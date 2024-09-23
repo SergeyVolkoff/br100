@@ -13,7 +13,6 @@ from backend.server_help.model_serv_help_connect import ConnectSrvHelp
 from backend.server_stor.model_serv_stor_connect import ConnectStorage
 
 br100 = ConnectBR()
-# br850 = ConnectBR850()
 serv_stor = ConnectStorage()
 serv_help = ConnectSrvHelp()
 
@@ -32,7 +31,6 @@ def check_FW_dut():
         # Получаем дату прошивки на DUT
         dateFW_DUT = br100.get_date_FW()
         # print("***dateFW_DUT=",dateFW_DUT)
-        # br100.ssh.disconnect()
 
         # Получаем дату прошивки на git-ci-storage
         dateFW_stor = serv_stor.get_date_last_FW()
@@ -126,7 +124,6 @@ def check_FW_dut():
         # Получаем дату прошивки на DUT
         dateFW_DUT = br850.get_date_FW()
         # print("***dateFW_DUT=",dateFW_DUT)
-        # br100.ssh.disconnect()
 
         # Получаем дату прошивки на git-ci-storage
         dateFW_stor = serv_stor.get_date_last_FW_850()

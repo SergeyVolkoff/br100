@@ -63,7 +63,7 @@ task_ids = ['Verified name {0}, Name length = {1}'.format(t,len(t))
 @pytest.mark.parametrize('hostname',name_host,  ids=task_ids)
 def test_check_change_hostname(hostname,):
      '''Тестирование  смены имени хоста'''
-     assert check_change_hostname (new_hostname=hostname)==True, f'сменить имя не удалось!'
+     assert check_change_hostname (new_hostname=hostname)==True, f'Сменить имя не удалось!'
 
 @allure.feature ('Тесты логгирования событий.')
 @allure.story('3.проверка создания файла логгирования.')
@@ -71,6 +71,23 @@ def test_check_logging_file():
      '''Тестирование создания файла логгирования.'''
      assert check_logging_file()==True, f'Логиррование не ведется или ведется не в файл logs!'
 
+@allure.feature ('Тест интерфейса.')
+@allure.story('4.проверка вывода данных по интерфейсу.')
+def test_check_int_link_speed():
+     '''Тестирование вывода скорости линка по интерфейсу eth0.'''
+     assert check_int_link_speed('eth0')==True, f'В выводе в командную строку нет нужных данных.'
+
+@allure.feature ('Тест интерфейса.')
+@allure.story('4.проверка вывода данных по интерфейсу.')
+def test_check_int_duplex():
+     '''Тестирование вывода duplex по интерфейсу eth0.'''
+     assert check_int_duplex('eth0')==True, f'В выводе в командную строку нет нужных данных.'
+
+@allure.feature ('Тест интерфейса.')
+@allure.story('4.проверка вывода данных по интерфейсу.')
+def test_check_int_mtu():
+     '''Тестирование вывода mtu по интерфейсу eth0.'''
+     assert check_int_mtu('eth0')==True, f'В выводе в командную строку нет нужных данных.'
 
 # if __name__ == "__main__":
 #     print(test_check_commands_show())

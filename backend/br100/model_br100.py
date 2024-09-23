@@ -176,7 +176,7 @@ class ConnectBR():
         return output
     
     def sendFWfromHelpSRV_850(self):
-        '''Получает прошивку свежую прошивку с UbuntuNS 10.27.193.101.'''
+        '''Получает  свежую прошивку с UbuntuNS 10.27.193.101.'''
         with open("../server_help/constants_connect.yaml") as f2:
                 self.VALUE_CONS_CONNECT_ser = yaml.safe_load(f2)
         self.check_connection(self.VALUE_CONS_CONNECT)
@@ -227,7 +227,9 @@ class ConnectBR():
                 return 'br850'
             else:
                 return f'Неизвестная модель!В cli {model_DUT}, но нет ge24.'
-            
+    
+   
+    
 if __name__=="__main__":
     br100 = ConnectBR()
-    print(br100.sendFWfromHelpSRV())
+    print(br100.link_speed(interface='eth0'))
