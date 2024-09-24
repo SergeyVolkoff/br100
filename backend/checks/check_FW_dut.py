@@ -37,7 +37,7 @@ def check_FW_dut():
         if 'br100' in br100.check_model_DUT():
             # Получаем дату прошивки на DUT
             dateFW_DUT = br100.get_date_FW()
-            # print("***dateFW_DUT=",dateFW_DUT)
+            print("***dateFW_DUT=",dateFW_DUT)
 
             # Получаем дату прошивки на git-ci-storage
             dateFW_stor = serv_stor.get_date_last_FW()

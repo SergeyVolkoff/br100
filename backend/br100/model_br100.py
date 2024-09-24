@@ -149,7 +149,17 @@ class ConnectBR():
                         f"Вызвано исключение при отправке комады:reg_output.group() на вывод cli:{output_cli} "
                         )
                 print('Ожидания и вывод в cli НЕ совпадают..')
-            return dateFW
+            # приводим к строке для обрезки
+            dateFW = str(pd.to_datetime(dateFW))
+            # print(dateFW)
+            # обрезаем минуты
+            dateFW=dt.datetime.strptime(dateFW,"%Y-%m-%d %H:%M:%S").strftime('%Y-%m-%d')
+            # print(dateFW)
+            # приводим к дате указывая где год
+            dateFW=dt.datetime.strptime(dateFW,"%Y-%m-%d")
+            # меняем вид отображения на нужный вид
+            dateFW_DUT1_dt = dateFW.strftime("%d/%m/%Y")
+            return str(dateFW_DUT1_dt)
         # date_curent_F = dt.datetime.now()
         # dateFW_F = dt.datetime.strptime(dateFW,"%d/%m/%Y")
         # return(date_curent_F>dateFW_F)
