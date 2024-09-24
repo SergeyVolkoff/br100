@@ -95,7 +95,7 @@ class ConnectBR():
         self.ssh.enable()
         try:
             temp = self.ssh.send_command('show version',read_timeout=2)
-            print(temp)
+            # print(temp)
             for i in temp:
                 with open("../temps/process_wr_read.txt", 'a+') as file:
                      file.write(i)
@@ -127,20 +127,29 @@ class ConnectBR():
             
     def get_date_FW(self):
         '''Возвращает дату установленой прошивки.'''
-        
         self.ssh.send_command_timing('enable')
         output_cli = self.ssh.send_command_timing('show version')
-        
-        try:
-            regex_output = re.search('MSK (?P<date>.+)',output_cli)
-            dateFW = regex_output.group('date')
-        except AttributeError as err:
-            print(err, 
-                    f"Вызвано исключение при отправке комады:reg_output.group() на вывод cli:{output_cli} "
-                    )
-            print('Ожидания и вывод в cli НЕ совпадают..')
-        
-        return dateFW
+        # проверяем какая версия отображения команды 'show version'
+        if 'Platform' not in output_cli:
+            try:
+                regex_output = re.search('MSK (?P<date>.+)',output_cli)
+                dateFW = regex_output.group('date')
+            except AttributeError as err:
+                print(err, 
+                        f"Вызвано исключение при отправке комады:reg_output.group() на вывод cli:{output_cli} "
+                        )
+                print('Ожидания и вывод в cli НЕ совпадают..')
+            return dateFW
+        else:
+            try:
+                regex_output = re.search('Compiled.+, (?P<date>\d+ \S+ \d+)',output_cli)
+                dateFW = regex_output.group('date')
+            except AttributeError as err:
+                print(err, 
+                        f"Вызвано исключение при отправке комады:reg_output.group() на вывод cli:{output_cli} "
+                        )
+                print('Ожидания и вывод в cli НЕ совпадают..')
+            return dateFW
         # date_curent_F = dt.datetime.now()
         # dateFW_F = dt.datetime.strptime(dateFW,"%d/%m/%Y")
         # return(date_curent_F>dateFW_F)
@@ -150,7 +159,7 @@ class ConnectBR():
         self.check_connection(self.VALUE_CONS_CONNECT)
         self.ssh.enable()
         temp = self.ssh.send_command('sh ip interface eth0 brief',read_timeout=1)
-        print(temp)
+        # print(temp)
         temp1 = re.search(r'eth0\s+\*(?P<ip_eth0>\S+)',temp)
         try:
             ip_eth0 = temp1.group('ip_eth0')
@@ -240,4 +249,4 @@ class ConnectBR():
     
 if __name__=="__main__":
     br100 = ConnectBR()
-    print(br100.get_ip_eth0())
+    print(br100.get_date_FW())

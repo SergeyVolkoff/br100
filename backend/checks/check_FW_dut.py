@@ -28,7 +28,9 @@ def check_FW_dut():
     Копирует на коммутатор новую прошивку и перезапускает его.
     Снова проверяет дату прошивки на коммутаторе и сравнивает с последней на сервере.
     '''
-    if '10.27' not in br100.get_ip_eth0():
+    ip_eth0 = br100.get_ip_eth0()
+    print(ip_eth0)
+    if '10.27' not in ip_eth0:
         print('Нет ip на eth0! Залить прошивку не удалось!')
         return False
     else:
@@ -65,38 +67,38 @@ def check_FW_dut():
 
                 # Копируем прошивку на сервер 10.27.193.101 где будет http сервер
                 result_get_img_store = serv_help.get_img_from_store()
-                print('result_get_img_store=',result_get_img_store)
+                # print('result_get_img_store=',result_get_img_store)
 
                 # Поднимаем http сервер в директории с прошивкой
                 result_up_http_serv = serv_help.up_http_serv()
-                print('result_up_http_serv=',result_up_http_serv)
+                # print('result_up_http_serv=',result_up_http_serv)
 
                 #  Копируем прошивку с http сервер на DUT 
                 result_sendFWfromHelpSRV = br100.sendFWfromHelpSRV()
-                print("result_sendFWfromHelpSRV - ",result_sendFWfromHelpSRV)
+                # print("result_sendFWfromHelpSRV - ",result_sendFWfromHelpSRV)
 
                 # Перезагружаем коммутатор, применяя прошивку
                 result_reboot = br100.reboot_DUT()
-                print('Dut reboot',result_reboot)
+                # print('Dut reboot',result_reboot)
                 time.sleep(130)
                 br100.ssh.send_command_timing('admin')
                 br100.ssh.send_command_timing('admin')
                 
                 # Останавливам http сервер в директории с прошивкой
                 result_down_http_serv = serv_help.down_http_serv()
-                print('result_down_http_serv=',result_down_http_serv)
+                # print('result_down_http_serv=',result_down_http_serv)
 
                 # Снова сравниваем даты прошивок на DUT и на git-ci-storage
                 dateFW_DUT1 = br100.get_date_FW()
-                print("dateFW_DUT1 = ", dateFW_DUT1)
+                # print("dateFW_DUT1 = ", dateFW_DUT1)
                 dateFW_DUT1_dt = dt.datetime.strptime(dateFW_DUT1,"%d/%m/%Y")
-                print("dateFW_DUT1_dt = ",dateFW_DUT1_dt)
+                # print("dateFW_DUT1_dt = ",dateFW_DUT1_dt)
                 dateFW_DUT1_dt = pd.to_datetime(dateFW_DUT1_dt)
-                print("dateFW_stor_dt = ", dateFW_stor_dt)
+                # print("dateFW_stor_dt = ", dateFW_stor_dt)
 
                 # Удаляем распакованные прошивки в директории на git-ci-storage
                 result_remove_dirFW = serv_stor.remove_unpack_FW()
-                print('result_remove_dirFW = ',result_remove_dirFW)
+                # print('result_remove_dirFW = ',result_remove_dirFW)
                 
                 # Если даты совпали - завершаем
                 if dateFW_DUT1_dt == dateFW_stor_dt:
@@ -154,19 +156,19 @@ def check_FW_dut():
                     Датa прошивки на git-ci-storage - {dateFW_stor}'
                         )
                 path_img, img_name = serv_stor.get_name_last_FW_path()
-                print('path_img, img_name=',path_img, img_name)
+                # print('path_img, img_name=',path_img, img_name)
 
                 # Копируем прошивку на сервер 10.27.193.101 где будет http сервер
                 result_get_img_store = serv_help.get_img_from_store_850()
-                print('result_get_img_store=',result_get_img_store)
+                # print('result_get_img_store=',result_get_img_store)
 
                 # Поднимаем http сервер в директории с прошивкой
                 result_up_http_serv = serv_help.up_http_serv_850()
-                print('result_up_http_serv=',result_up_http_serv)
+                # print('result_up_http_serv=',result_up_http_serv)
 
                 #  Копируем прошивку с http сервер на DUT 
                 result_sendFWfromHelpSRV = br850.sendFWfromHelpSRV_850()
-                print(result_sendFWfromHelpSRV)
+                # print(result_sendFWfromHelpSRV)
 
                 # Перезагружаем коммутатор, применяя прошивку
                 result_reboot = br850.reboot_DUT()
@@ -191,7 +193,7 @@ def check_FW_dut():
 
                 # Удаляем распакованные прошивки в директории на git-ci-storage
                 result_remove_dirFW = serv_stor.remove_unpack_FW_850()
-                print('result_remove_dirFW = ',result_remove_dirFW)
+                # print('result_remove_dirFW = ',result_remove_dirFW)
                 
                 # Если даты совпали - завершаем
                 if dateFW_DUT1_dt == dateFW_stor_dt:
