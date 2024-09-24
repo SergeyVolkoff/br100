@@ -142,7 +142,7 @@ class ConnectBR():
             return dateFW
         else:
             try:
-                regex_output = re.search('Compiled.+, (?P<date>\d+ \S+ \d+)',output_cli)
+                regex_output = re.search(r'Compiled.+, (?P<date>\d+ \S+ \d+)',output_cli)
                 dateFW = regex_output.group('date')
             except AttributeError as err:
                 print(err, 
