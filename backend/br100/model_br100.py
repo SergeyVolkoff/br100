@@ -166,14 +166,18 @@ class ConnectBR():
         ip_HelpSRV = (self.VALUE_CONS_CONNECT_ser['ip'])
         path_img, img_name = serv_stor.get_name_last_FW_path()
         cmnd_load_FW = f"copy image {ip_HelpSRV}/{img_name}"
-        # print("***",cmnd_load_FW)
-        print(self.ssh.enable())
-        # self.ssh.send_command_timing('enable')
+        
+        print("***",cmnd_load_FW)
+        # print(self.ssh.enable())
+        print(self.ssh.send_command_timing('enable'))
         output = self.ssh.send_command_timing(
             cmnd_load_FW
             )
+        if 'Copy Failed' in output:
+            return 'Copy Failed Check ip address on eth0!!!'
         # result_ex = self.ssh.disconnect()
-        return output
+        else:
+            return output
     
     def sendFWfromHelpSRV_850(self):
         '''Получает  свежую прошивку с UbuntuNS 10.27.193.101.'''
@@ -190,7 +194,11 @@ class ConnectBR():
             cmnd_load_FW
             )
         # result_ex = self.ssh.disconnect()
-        return output
+        if 'Copy Failed' in output:
+            return 'Copy Failed Check ip address on eth0!!!'
+        # result_ex = self.ssh.disconnect()
+        else:
+            return output
     
     def reboot_DUT(self):
         '''Перезагрузка коммутатора безусловная'''
@@ -232,4 +240,4 @@ class ConnectBR():
     
 if __name__=="__main__":
     br100 = ConnectBR()
-    print(br100.link_speed(interface='eth0'))
+    print(br100.get_ip_eth0())
