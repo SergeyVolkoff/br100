@@ -1,0 +1,9 @@
+bridge-domain 3 protocol ieee
+ip vrf test3
+rd 65001:11
+route-target both 65001:11
+ex
+ip forwarding vrf test3
+interface br3
+ip address 20.20.20.2/30
+end

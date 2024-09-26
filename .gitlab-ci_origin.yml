@@ -1,0 +1,82 @@
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+      when: never
+    - when: always
+
+image: python:3.10-slim
+default:
+  tags:
+    - br100
+
+stages:
+    - upgrade_check_fw
+    - test
+    - report
+    
+run_check_fw:
+    stage: upgrade_check_fw
+    image: python
+    artifacts:
+      when: always
+      expire_in: 5 days
+      paths:
+          # - backend/tests/allure-report
+          - backend/tests/report_html
+    before_script:
+        - apt-get update
+        # - apt install -y openjdk-17-jdk openjdk-17-jre
+        # - wget https://github.com/allure-framework/allure2/releases/download/2.30.0/allure-2.30.0.tgz && tar -zxvf allure-2.30.0.tgz -C /opt/ && ln -s /opt/allure-2.30.0/bin/allure /usr/bin/allure
+        - pip install --upgrade pip
+        - pip install -r backend/requirements.txt
+    script:
+        - cd backend/tests
+        - pytest -v --html=report_html/BULAT_TEST_FW.html test_fw.py 
+        # - pytest -v --html=report_html/BULAT_TEST_FW.html --alluredir=allure-results_fw test_fw.py 
+        # - allure generate -c allure-results -o allure-report
+    after_script:
+        - cd backend/tests
+        # - allure generate -c allure-results_fw -o allure-report_fw
+
+run_test:
+    stage: test
+    image: python
+    artifacts:
+      when: always
+      expire_in: 5 days
+      paths:
+          # - backend/tests/allure-report
+          - backend/tests/report_html
+    before_script:
+        - apt-get update
+        # - apt install -y openjdk-17-jdk openjdk-17-jre
+        # - wget https://github.com/allure-framework/allure2/releases/download/2.30.0/allure-2.30.0.tgz && tar -zxvf allure-2.30.0.tgz -C /opt/ && ln -s /opt/allure-2.30.0/bin/allure /usr/bin/allure
+        - pip install --upgrade pip
+        - pip install -r backend/requirements.txt
+    script:
+        - cd backend/tests
+        - pytest -v --html=report_html/BULAT_TEST.html test_cmd_show.py 
+        # - pytest -v --html=report_html/BULAT_TEST.html --alluredir=allure-results test_cmd_show.py 
+        # - allure generate -c allure-results -o allure-report
+    allow_failure: true
+    after_script:
+        - cd backend/tests
+        # - allure generate -c allure-results -o allure-report
+pages:
+  stage: report
+  needs:
+    - run_test
+    - run_check_fw
+  script:
+    # - cd ../../
+    # - mkdir allure-report_public
+    - mkdir html-report_public
+    # - cp -r backend/tests/allure-report/* allure-report_public
+    - cp -r backend/tests/report_html/* html-report_public
+    
+  artifacts:
+    when: always
+    expire_in: never
+    paths:
+        # - allure-report_public
+        - html-report_public

@@ -51,7 +51,11 @@ class ConnectBR():
             exit()
 
     def check_connection(self, log=True):
-        """Check connection to DUT."""
+        """Check connection to DUT.
+
+        Args:
+            log (bool, optional): в случает ответа коммутатора. Defaults to True.
+        """
         if log:
             CONSOLE.print(
                 'Пробую подключиться к', self.VALUE_CONS_CONNECT['host'],
@@ -71,7 +75,8 @@ class ConnectBR():
                 style='fail')
 
     def disable_config_mode(self):
-        "Check mode. if mode config return true - exit from config"
+        """Check mode. if mode config return true - exit from config"""
+        
         # self.ssh.enable()
         # self.ssh.config_mode()
         check_mode_conn = self.ssh.check_config_mode()
@@ -90,7 +95,8 @@ class ConnectBR():
             exit()
 
     def sh_ver(self):
-        '''Проверка версии прошивки '''
+        """Проверка версии прошивки."""
+
         self.check_connection(self.VALUE_CONS_CONNECT)
         self.ssh.enable()
         try:

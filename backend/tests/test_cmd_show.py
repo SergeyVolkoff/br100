@@ -71,23 +71,6 @@ def test_check_logging_file():
      '''Тестирование создания файла логгирования.'''
      assert check_logging_file()==True, f'Логиррование не ведется или ведется не в файл logs!'
 
-@allure.feature ('Тест интерфейса.')
-@allure.story('4.проверка вывода данных по интерфейсу.')
-def test_check_int_link_speed():
-     '''Тестирование вывода скорости линка по интерфейсу eth0.'''
-     assert check_int_link_speed('eth0')==True, f'В выводе в командную строку нет нужных данных.'
-
-@allure.feature ('Тест интерфейса.')
-@allure.story('4.проверка вывода данных по интерфейсу.')
-def test_check_int_duplex():
-     '''Тестирование вывода duplex по интерфейсу eth0.'''
-     assert check_int_duplex('eth0')==True, f'В выводе в командную строку нет нужных данных.'
-
-@allure.feature ('Тест интерфейса.')
-@allure.story('4.проверка вывода данных по интерфейсу.')
-def test_check_int_mtu():
-     '''Тестирование вывода mtu по интерфейсу eth0.'''
-     assert check_int_mtu('eth0')==True, f'В выводе в командную строку нет нужных данных.'
 
 # if __name__ == "__main__":
 #     print(test_check_commands_show())

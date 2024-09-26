@@ -1,82 +1,113 @@
-workflow:
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "push"'
-      when: never
-    - when: always
+stages:
+   # - build
+   - test_cmd_show
+   - test_speed_interface
+   - test_check_ip_bridge
+   - report
+#   - test
+
+# software_update:
+#    stage: build
+#    script:
+#     - ./scripts/upload.sh
+
+# static_lag-test:
+#   stage: test
+#   script:
+#     - echo "Static_lag test running"
+#     - pip install -r requirements.txt
+#     - pytest tests/test_static_lag.py --maxfail=1 --disable-warnings -v
+
+# lag-test:
+#   stage: test
+#   script:
+#     - echo "LAG test running"
+#     - pytest tests/test_lag.py --maxfail=1 --disable-warnings -v
+#   needs:
+#     - static_lag-test
+
+# subinterface-test:
+#   stage: test
+#   script:
+#     - echo "Subinterface test running"
+#     - pytest tests/test_subinterface.py --maxfail=1 --disable-warnings -v
+#   needs:
+#     - lag-test
 
 image: python:3.10-slim
 default:
   tags:
     - br100
 
-stages:
-    - upgrade_check_fw
-    - test
-    - report
-    
-run_check_fw:
-    stage: upgrade_check_fw
-    image: python
-    artifacts:
+test_cmd_show:
+   stage: test_cmd_show
+   image: python
+   artifacts:
       when: always
       expire_in: 5 days
       paths:
-          # - backend/tests/allure-report
-          - backend/tests/report_html
-    before_script:
-        - apt-get update
-        # - apt install -y openjdk-17-jdk openjdk-17-jre
-        # - wget https://github.com/allure-framework/allure2/releases/download/2.30.0/allure-2.30.0.tgz && tar -zxvf allure-2.30.0.tgz -C /opt/ && ln -s /opt/allure-2.30.0/bin/allure /usr/bin/allure
-        - pip install --upgrade pip
-        - pip install -r backend/requirements.txt
-    script:
-        - cd backend/tests
-        - pytest -v --html=report_html/BULAT_TEST_FW.html test_fw.py 
-        # - pytest -v --html=report_html/BULAT_TEST_FW.html --alluredir=allure-results_fw test_fw.py 
-        # - allure generate -c allure-results -o allure-report
-    after_script:
-        - cd backend/tests
-        # - allure generate -c allure-results_fw -o allure-report_fw
+            - backend/tests/report_html
+   before_script:
+      - apt-get update
+      - pip install --upgrade pip
+      - pip install -r backend/requirements.txt
+   script:
+      - cd backend/tests
+      - pytest -v --html=report_html/BULAT_TEST.html test_cmd_show.py 
+   allow_failure: true
+   after_script:
+      - cd backend/tests
 
-run_test:
-    stage: test
-    image: python
-    artifacts:
+test_speed_interface:
+   stage: test_speed_interface
+   image: python
+   artifacts:
       when: always
       expire_in: 5 days
       paths:
-          # - backend/tests/allure-report
-          - backend/tests/report_html
-    before_script:
-        - apt-get update
-        # - apt install -y openjdk-17-jdk openjdk-17-jre
-        # - wget https://github.com/allure-framework/allure2/releases/download/2.30.0/allure-2.30.0.tgz && tar -zxvf allure-2.30.0.tgz -C /opt/ && ln -s /opt/allure-2.30.0/bin/allure /usr/bin/allure
-        - pip install --upgrade pip
-        - pip install -r backend/requirements.txt
-    script:
-        - cd backend/tests
-        - pytest -v --html=report_html/BULAT_TEST.html test_cmd_show.py 
-        # - pytest -v --html=report_html/BULAT_TEST.html --alluredir=allure-results test_cmd_show.py 
-        # - allure generate -c allure-results -o allure-report
-    allow_failure: true
-    after_script:
-        - cd backend/tests
-        # - allure generate -c allure-results -o allure-report
+            - backend/tests/report_html
+   before_script:
+      - apt-get update
+      - pip install --upgrade pip
+      - pip install -r backend/requirements.txt
+   script:
+      - cd backend/tests
+      - pytest -v --html=report_html/BULAT_TEST.html test_check_speed_interf.py 
+      - pytest -v --html=report_html/BULAT_TEST.html test_check_ip_bridge.py 
+
+   allow_failure: true
+   after_script:
+      - cd backend/tests
+
+
+test_check_ip_bridge:
+   stage: test_check_ip_bridge
+   image: python
+   artifacts:
+      when: always
+      expire_in: 5 days
+      paths:
+            - backend/tests/report_html
+   before_script:
+      - apt-get update
+      - pip install --upgrade pip
+      - pip install -r backend/requirements.txt
+   script:
+      - cd backend/tests
+      - pytest -v --html=report_html/BULAT_TEST.html test_check_ip_bridge.py 
+   allow_failure: true
+   after_script:
+      - cd backend/tests
+
 pages:
   stage: report
-  needs:
-    - run_test
-    - run_check_fw
+
   script:
-    # - cd ../../
-    # - mkdir allure-report_public
     - mkdir html-report_public
-    # - cp -r backend/tests/allure-report/* allure-report_public
     - cp -r backend/tests/report_html/* html-report_public
     
   artifacts:
     when: always
     expire_in: never
     paths:
-        # - allure-report_public
         - html-report_public
