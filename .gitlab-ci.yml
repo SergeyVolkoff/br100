@@ -96,6 +96,7 @@ test_check_ip_bridge:
    after_script:
       - cd backend/tests
 
+
 pages:
   stage: report
 
