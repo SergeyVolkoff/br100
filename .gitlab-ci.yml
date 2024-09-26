@@ -1,6 +1,6 @@
 stages:
    # - build
-   - test_all
+   - test
    - report
 #   - test
 
@@ -37,27 +37,8 @@ default:
   tags:
     - br100
 
-# test_cmd_show:
-#    stage: test_cmd_show
-#    image: python
-#    artifacts:
-#       when: always
-#       expire_in: 5 days
-#       paths:
-#             - backend/tests/report_html
-#    before_script:
-#       - apt-get update
-#       - pip install --upgrade pip
-#       - pip install -r backend/requirements.txt
-#    script:
-#       - cd backend/tests
-#       - pytest -v --html=report_html/BULAT_TEST.html test_cmd_show.py 
-#    allow_failure: true
-#    after_script:
-#       - cd backend/tests
-
-test_all:
-   stage: test_all
+test_cmd_show:
+   stage: test
    image: python
    artifacts:
       when: always
@@ -71,32 +52,49 @@ test_all:
    script:
       - cd backend/tests
       - pytest -v --html=report_html/BULAT_TEST_cmd_show.html test_cmd_show.py 
+   allow_failure: true
+   after_script:
+      - cd backend/tests
+
+test_check_speed_interf:
+   stage: test
+   image: python
+   artifacts:
+      when: always
+      expire_in: 5 days
+      paths:
+            - backend/tests/report_html
+   before_script:
+      - apt-get update
+      - pip install --upgrade pip
+      - pip install -r backend/requirements.txt
+   script:
+      - cd backend/tests
       - pytest -v --html=report_html/BULAT_TEST_check_speed_interf.html test_check_speed_interf.py 
-      - pytest -v --html=report_html/BULAT_TEST_check_ip_bridge.html test_check_ip_bridge.py 
 
    allow_failure: true
    after_script:
       - cd backend/tests
 
 
-# test_check_ip_bridge:
-#    stage: test_check_ip_bridge
-#    image: python
-#    artifacts:
-#       when: always
-#       expire_in: 5 days
-#       paths:
-#             - backend/tests/report_html
-#    before_script:
-#       - apt-get update
-#       - pip install --upgrade pip
-#       - pip install -r backend/requirements.txt
-#    script:
-#       - cd backend/tests
-#       - pytest -v --html=report_html/BULAT_TEST.html test_check_ip_bridge.py 
-#    allow_failure: true
-#    after_script:
-#       - cd backend/tests
+test_check_ip_bridge:
+   stage: test
+   image: python
+   artifacts:
+      when: always
+      expire_in: 5 days
+      paths:
+            - backend/tests/report_html
+   before_script:
+      - apt-get update
+      - pip install --upgrade pip
+      - pip install -r backend/requirements.txt
+   script:
+      - cd backend/tests
+      - pytest -v --html=report_html/BULAT_TEST_check_ip_bridge.html test_check_ip_bridge.py 
+   allow_failure: true
+   after_script:
+      - cd backend/tests
 
 pages:
   stage: report
